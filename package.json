@@ -1,0 +1,52 @@
+{
+  "name": "realtime-product-search",
+  "version": "1.0.0",
+  "description": "A lightning-fast, real-time product search system with autocomplete functionality - Flipkart Grid 7.0 submission",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "node test_search.js",
+    "reindex": "node reindex.js",
+    "generate-products": "node generate_products.js",
+    "serve": "node src/server.js",
+    "demo": "node src/server.js"
+  },
+  "keywords": [
+    "search",
+    "autocomplete",
+    "realtime",
+    "product-search",
+    "nodejs",
+    "express",
+    "javascript",
+    "flipkart-grid",
+    "e-commerce",
+    "elasticsearch",
+    "fuzzy-search"
+  ],
+  "author": "Flipkart Grid 7.0 Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/realtime-product-search.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/realtime-product-search/issues"
+  },
+  "homepage": "https://github.com/yourusername/realtime-product-search#readme",
+  "dependencies": {
+    "@elastic/elasticsearch": "^9.1.0",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
