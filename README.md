@@ -1,4 +1,4 @@
-# 🏆 Flipkart GRiD 7.0 - DeCypher Search Platform
+# 🏆 Flipkart GRiD 7.0 Grand Finale - Real-Time Search System
 
 **Team Name:** Decypher  
 **Team Members:** Siddharth Shankar (Team Lead), Harsh Upadhyay, Ritika Ranjan Treti, Nagendla Neha Reddy
@@ -183,14 +183,39 @@ We've built a **real-time search engine** with advanced autocomplete functionali
 ## 🚀 Quick Start for Judges
 
 ### **Instant Demo Setup**
-```bash
-# 1. Start Elasticsearch
-docker run -d --name elasticsearch -p 9200:9200 \
-  -e "discovery.type=single-node" \
-  -e "xpack.security.enabled=false" \
-  docker.elastic.co/elasticsearch/elasticsearch:8.11.0
 
-# 2. Install and run
+**Prerequisites:** Elasticsearch 9.1.0
+
+**Elasticsearch Configuration** - Create or update your `elasticsearch.yml` file:
+```yaml
+# ======================== Elasticsearch Configuration =========================
+
+# Give your cluster a name (optional)
+cluster.name: elasticsearch
+
+# Node name (optional)
+node.name: SID
+
+# Network settings
+network.host: 127.0.0.1
+http.port: 9200
+
+# Disable all X-Pack security for development
+xpack.security.enabled: false
+xpack.security.http.ssl.enabled: false
+xpack.security.transport.ssl.enabled: false
+
+# Optional: disable disk space checks (only for dev if low on space)
+cluster.routing.allocation.disk.threshold_enabled: false
+```
+
+**Quick Start Commands:**
+```bash
+# 1. Start Elasticsearch 9.1.0 (with above configuration)
+# Download from: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-9.1.0-linux-x86_64.tar.gz
+./elasticsearch-9.1.0/bin/elasticsearch
+
+# 2. Install and run DeCypher
 npm install
 npm run reindex    # Index 412 products
 npm start         # Start on http://localhost:3000
@@ -202,6 +227,36 @@ npm start         # Start on http://localhost:3000
 3. **Performance**: Notice instant response times and smooth interactions
 4. **Mobile Experience**: Resize browser to see responsive design
 5. **Error Handling**: Disconnect internet - see graceful fallbacks
+
+### **Troubleshooting Elasticsearch Issues**
+
+**If you see "No Elasticsearch results, falling back to comprehensive search":**
+
+1. **Check Elasticsearch Status:**
+```bash
+# Test if Elasticsearch is running
+curl http://localhost:9200
+
+# Check if products are indexed
+curl http://localhost:9200/products/_search
+```
+
+2. **Verify Configuration:**
+- Ensure `elasticsearch.yml` has the configuration shown above
+- Check that Elasticsearch 9.1.0 is being used
+- Verify network.host is set to 127.0.0.1 and port 9200
+
+3. **Re-index Products:**
+```bash
+# Delete existing index and re-create
+npm run reindex
+```
+
+4. **Common Solutions:**
+- Restart Elasticsearch service
+- Check firewall settings for port 9200
+- Ensure sufficient disk space and memory
+- Verify X-Pack security is disabled
 
 ---
 
@@ -268,9 +323,11 @@ DeCypher-Platform/
 
 **Ready to transform e-commerce search experiences?**
 
-- **Team Lead**: Siddharth Shankar
-- **Technical Leads**: Harsh Upadhyay, Ritika Ranjan Treti  
-- **Development Lead**: Nagendla Neha Reddy
+**Team Members:**
+- **Siddharth Shankar** (Team Lead)
+- **Harsh Upadhyay** (Team Member)
+- **Ritika Ranjan Treti** (Team Member)  
+- **Nagendla Neha Reddy** (Team Member)
 
 ---
 
