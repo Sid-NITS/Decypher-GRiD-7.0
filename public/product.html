@@ -828,12 +828,48 @@
         // Load product data
         async function loadProduct(productId) {
             try {
+                console.log('Loading product with ID:', productId);
                 const response = await fetch(`/api/product/${productId}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const product = await response.json();
+                console.log('Loaded product:', product);
                 displayProduct(product);
             } catch (error) {
                 console.error('Error loading product:', error);
-                loadDemoProduct();
+                // Show error message instead of falling back to demo
+                showProductError(productId, error.message);
+            }
+        }
+
+        // Show error when product cannot be loaded
+        function showProductError(productId, errorMessage) {
+            document.getElementById('productTitle').textContent = 'Product Not Found';
+            document.getElementById('breadcrumbTitle').textContent = 'Product Not Found';
+            document.getElementById('productCategory').textContent = 'Error';
+            
+            // Create error display
+            const mainContent = document.querySelector('.product-content');
+            if (mainContent) {
+                mainContent.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 8px;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ff6b6b; margin-bottom: 20px;"></i>
+                        <h2>Product Not Found</h2>
+                        <p style="color: #666; margin: 20px 0;">Sorry, we couldn't find the product with ID: <strong>${productId}</strong></p>
+                        <p style="color: #666; margin-bottom: 30px;">Error: ${errorMessage}</p>
+                        <a href="/" style="background: #2874f0; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block;">
+                            <i class="fas fa-home" style="margin-right: 8px;"></i>
+                            Go to Homepage
+                        </a>
+                        <a href="search.html" style="background: #fb641b; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px; display: inline-block; margin-left: 10px;">
+                            <i class="fas fa-search" style="margin-right: 8px;"></i>
+                            Search Products
+                        </a>
+                    </div>
+                `;
             }
         }
 
@@ -883,33 +919,53 @@
             document.getElementById('productCategory').textContent = product.category;
             document.title = `${product.title} - AutoSuggest`;
 
-            // Update pricing
-            const discount = Math.floor(((product.originalPrice - product.price) / product.originalPrice) * 100);
-            const savings = product.originalPrice - product.price;
+            // Handle different price field names from API
+            const currentPrice = product.currentPrice || product.price;
+            const originalPrice = product.originalPrice;
             
-            document.getElementById('currentPrice').textContent = `₹${product.price.toLocaleString()}`;
-            document.getElementById('originalPrice').textContent = `₹${product.originalPrice.toLocaleString()}`;
+            // Update pricing
+            const discount = Math.floor(((originalPrice - currentPrice) / originalPrice) * 100);
+            const savings = originalPrice - currentPrice;
+            
+            document.getElementById('currentPrice').textContent = `₹${currentPrice.toLocaleString()}`;
+            document.getElementById('originalPrice').textContent = `₹${originalPrice.toLocaleString()}`;
             document.getElementById('discount').textContent = `${discount}% off`;
             document.getElementById('savings').textContent = `You save ₹${savings.toLocaleString()}`;
 
+            // Handle different rating count field names from API
+            const ratingCount = product.ratingCount || product.reviewCount || 0;
+            const reviewCount = product.reviewCount || product.ratingCount || 0;
+
             // Update rating
             document.getElementById('ratingValue').textContent = product.rating.toFixed(1);
-            document.getElementById('ratingCount').textContent = `${product.ratingCount} ratings and ${product.reviewCount} reviews`;
+            document.getElementById('ratingCount').textContent = `${ratingCount} ratings and ${reviewCount} reviews`;
             document.getElementById('overallRating').textContent = product.rating.toFixed(1);
-            document.getElementById('totalReviews').textContent = `${product.ratingCount} ratings & ${product.reviewCount} reviews`;
+            document.getElementById('totalReviews').textContent = `${ratingCount} ratings & ${reviewCount} reviews`;
 
-            // Update images
-            updateProductImages(product.images);
+            // Update images - handle both single image and images array
+            const productImages = product.images || [product.image] || ['https://via.placeholder.com/400x400/f0f0f0/999999?text=No+Image'];
+            updateProductImages(productImages);
 
-            // Update highlights
-            if (product.highlights) {
+            // Update highlights - handle both highlights and features
+            const highlights = product.highlights || product.features || [];
+            if (highlights.length > 0) {
                 const highlightsList = document.getElementById('highlights');
-                highlightsList.innerHTML = product.highlights.map(highlight => `<li>${highlight}</li>`).join('');
+                highlightsList.innerHTML = highlights.map(highlight => `<li>${highlight}</li>`).join('');
             }
 
             // Update specifications
             if (product.specifications) {
                 updateSpecifications(product.specifications);
+            } else {
+                // Create basic specifications from product data
+                const basicSpecs = {
+                    brand: product.brand,
+                    model: product.title,
+                    category: product.category,
+                    warranty: product.warranty || '1 Year',
+                    sku: product.sku || 'N/A'
+                };
+                updateSpecifications(basicSpecs);
             }
         }
 
@@ -943,11 +999,45 @@
 
         // Update specifications
         function updateSpecifications(specs) {
-            if (specs.brand) document.getElementById('specBrand').textContent = specs.brand;
-            if (specs.model) document.getElementById('specModel').textContent = specs.model;
-            if (specs.storage) document.getElementById('specStorage').textContent = specs.storage;
-            if (specs.display) document.getElementById('specDisplay').textContent = specs.display;
-            if (specs.os) document.getElementById('specOS').textContent = specs.os;
+            // Handle both object and key-value specifications
+            if (typeof specs === 'object') {
+                // Try to map common specification fields
+                const specMap = {
+                    'specBrand': specs.brand || specs.Brand,
+                    'specModel': specs.model || specs.Model || specs.title,
+                    'specStorage': specs.storage || specs.Storage || specs['Storage Capacity'],
+                    'specDisplay': specs.display || specs.Display || specs['Screen Size'],
+                    'specOS': specs.os || specs.OS || specs['Operating System']
+                };
+
+                // Update each specification field if element exists
+                Object.keys(specMap).forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element && specMap[elementId]) {
+                        element.textContent = specMap[elementId];
+                    }
+                });
+
+                // Also try to populate other fields if they exist
+                Object.keys(specs).forEach(key => {
+                    const value = specs[key];
+                    if (value && typeof value === 'string') {
+                        // Try to find corresponding element
+                        const possibleIds = [
+                            `spec${key}`,
+                            `spec${key.charAt(0).toUpperCase() + key.slice(1)}`,
+                            key.toLowerCase()
+                        ];
+                        
+                        possibleIds.forEach(id => {
+                            const element = document.getElementById(id);
+                            if (element) {
+                                element.textContent = value;
+                            }
+                        });
+                    }
+                });
+            }
         }
 
         // Check delivery

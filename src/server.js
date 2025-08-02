@@ -105,11 +105,34 @@ app.get('/api/data/demo-products', (req, res) => {
 
 app.get('/api/data/featured-products', (req, res) => {
   try {
-    const featuredProducts = require('../data/featured_products.json');
+    // Get real featured products from the comprehensive database
+    const featuredProducts = searchEngine.getFeaturedProducts(8); // Get 8 featured products
     res.json(featuredProducts);
   } catch (error) {
     console.error('Error loading featured products:', error);
-    res.status(500).json({ error: 'Failed to load featured products' });
+    // Fallback to static featured products if search engine fails
+    try {
+      const fallbackFeatured = require('../data/featured_products.json');
+      // Update the IDs to be real ones from comprehensive products
+      const comprehensiveProducts = require('../data/comprehensive_products.json');
+      const realFeaturedProducts = fallbackFeatured.map((product, index) => {
+        const realProduct = comprehensiveProducts[index] || comprehensiveProducts[0];
+        return {
+          ...product,
+          id: realProduct.id, // Use real ID from database
+          title: realProduct.title,
+          brand: realProduct.brand,
+          category: realProduct.category,
+          currentPrice: realProduct.currentPrice,
+          originalPrice: realProduct.originalPrice,
+          rating: realProduct.rating,
+          reviewCount: realProduct.reviewCount
+        };
+      });
+      res.json(realFeaturedProducts);
+    } catch (fallbackError) {
+      res.status(500).json({ error: 'Failed to load featured products' });
+    }
   }
 });
 

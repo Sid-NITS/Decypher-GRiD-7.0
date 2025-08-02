@@ -739,6 +739,38 @@ class ComprehensiveSearchEngine {
         }
         return matrix[str2.length][str1.length];
     }
+
+    getFeaturedProducts(limit = 8) {
+        // Get a mix of high-rated, popular products for featured display
+        const featured = this.products
+            .filter(product => 
+                product.rating >= 4.0 && 
+                product.reviewCount >= 100 &&
+                product.inStock !== false
+            )
+            .sort((a, b) => {
+                // Sort by rating first, then by review count
+                if (a.rating !== b.rating) {
+                    return b.rating - a.rating;
+                }
+                return (b.reviewCount || 0) - (a.reviewCount || 0);
+            })
+            .slice(0, limit)
+            .map(product => ({
+                id: product.id,
+                title: product.title,
+                brand: product.brand,
+                category: product.category,
+                currentPrice: product.currentPrice,
+                originalPrice: product.originalPrice,
+                discount: product.discount,
+                rating: product.rating,
+                reviewCount: product.reviewCount,
+                image: product.image
+            }));
+
+        return featured;
+    }
 }
 
 module.exports = ComprehensiveSearchEngine;

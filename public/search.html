@@ -905,67 +905,22 @@
             }
             
             return apiResults.map((item, index) => {
-                // First, try to find a matching demo product by title similarity
-                const demoProduct = findMatchingDemoProduct(item.title || item.name);
-                
-                if (demoProduct) {
-                    // Use demo product data with local images
-                    return {
-                        id: demoProduct.id,
-                        title: demoProduct.title,
-                        price: demoProduct.currentPrice,
-                        originalPrice: demoProduct.originalPrice,
-                        rating: demoProduct.rating,
-                        reviewCount: demoProduct.reviewCount,
-                        image: demoProduct.image, // This has local SVG path
-                        features: Array.isArray(demoProduct.features) ? demoProduct.features.join(', ') : demoProduct.features,
-                        category: demoProduct.category
-                    };
-                }
-                
-                // If no demo product match, use local image mapping
+                // Get local image for better display (but keep real product ID)
                 const localImage = getLocalImageForProduct(item.title || item.name, item.category, index);
                 
+                // ALWAYS use the real API product ID - never replace with demo IDs
                 return {
-                    id: item.id || item._id,
+                    id: item.id || item._id, // Keep the real product ID from API
                     title: item.title || item.name,
                     price: item.currentPrice || item.price || Math.floor(Math.random() * 50000) + 5000,
                     originalPrice: item.originalPrice || (item.currentPrice || item.price ? Math.floor((item.currentPrice || item.price) * 1.2) : Math.floor(Math.random() * 60000) + 10000),
                     rating: item.rating || 4.0,
                     reviewCount: item.reviewCount || Math.floor(Math.random() * 1000) + 100,
-                    image: localImage,
+                    image: localImage, // Use local image for display but keep real ID for linking
                     features: item.features || item.description || 'No description available',
                     category: item.category || 'general'
                 };
             });
-        }
-
-        // Find matching demo product by title similarity
-        function findMatchingDemoProduct(searchTitle) {
-            if (!searchTitle || !demoProducts || demoProducts.length === 0) return null;
-            
-            const searchLower = searchTitle.toLowerCase();
-            
-            // Try exact matches first
-            for (const demo of demoProducts) {
-                if (demo.title.toLowerCase() === searchLower) {
-                    return demo;
-                }
-            }
-            
-            // Try partial matches for key products
-            const keyWords = ['iphone', 'samsung', 'galaxy', 'oneplus', 'redmi', 'vivo', 'dell', 'sony', 'nike', 'adidas', 'levis', 'psychology', 'atomic', 'macbook'];
-            
-            for (const keyword of keyWords) {
-                if (searchLower.includes(keyword)) {
-                    const match = demoProducts.find(demo => 
-                        demo.title.toLowerCase().includes(keyword)
-                    );
-                    if (match) return match;
-                }
-            }
-            
-            return null;
         }
 
         // Get local image for product based on title and category
