@@ -1,16 +1,16 @@
 # 🚀 Real-time Product Search with Autocomplete
 
-A lightning-fast, real-time product search system with autocomplete functionality, similar to Flipkart's search experience. Built with Node.js and vanilla JavaScript - **no external dependencies like Elasticsearch required**.
+A lightning-fast, real-time product search system with autocomplete functionality, similar to Flipkart's search experience. Built with Node.js, Express, and Elasticsearch for enterprise-grade search capabilities.
 
-![Demo](https://img.shields.io/badge/Demo-Live-brightgreen) ![Node.js](https://img.shields.io/badge/Node.js-v20+-green) ![License](https://img.shields.io/badge/License-MIT-blue)
+![Demo](https://img.shields.io/badge/Demo-Live-brightgreen) ![Node.js](https://img.shields.io/badge/Node.js-v16+-green) ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-v8+-orange) ![License](https://img.shields.io/badge/License-MIT-blue)
 
 ## ✨ Features
 
 - 🔍 **Real-time Search** - Instant suggestions as you type
-- ⚡ **Ultra Fast** - In-memory search with sub-millisecond response times
+- ⚡ **Ultra Fast** - Elasticsearch-powered search with optimized indexing
 - 🎯 **Smart Matching** - Fuzzy search, prefix matching, and synonym support
 - 📱 **Responsive Design** - Works perfectly on mobile and desktop
-- 🚀 **Zero Dependencies** - No Elasticsearch or external search engines needed
+- � **Elasticsearch Integration** - Professional search engine with advanced features
 - 🎮 **Interactive Demo** - Automated typing demonstration
 - 📊 **Performance Metrics** - Real-time monitoring of search performance
 - ⌨️ **Keyboard Navigation** - Arrow keys, Enter, and Escape support
@@ -30,6 +30,7 @@ A lightning-fast, real-time product search system with autocomplete functionalit
 
 ### Prerequisites
 - Node.js 16+ installed
+- Elasticsearch 8+ running locally or accessible remotely
 - npm or yarn package manager
 
 ### Installation
@@ -42,16 +43,28 @@ cd realtime-product-search
 # Install dependencies
 npm install
 
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your Elasticsearch configuration
+
+# Start Elasticsearch (if running locally)
+# Download from: https://www.elastic.co/downloads/elasticsearch
+
+# Index the product data
+npm run reindex
+
 # Start the server
 npm start
 ```
 
 ### Usage
 
-1. **Open your browser** and visit `http://localhost:3000`
-2. **Start typing** in the search box
-3. **Watch instant suggestions** appear
-4. **Navigate with arrow keys** or click to select
+1. **Ensure Elasticsearch is running** (usually at `http://localhost:9200`)
+2. **Index the product data** using `npm run reindex`
+3. **Open your browser** and visit `http://localhost:3000`
+4. **Start typing** in the search box
+5. **Watch instant suggestions** appear powered by Elasticsearch
+6. **Navigate with arrow keys** or click to select
 
 ## 📁 Project Structure
 
@@ -60,9 +73,11 @@ autosuggest-es/
 ├── src/
 │   ├── server.js              # Express server setup
 │   ├── search/
-│   │   └── suggest.js         # Search logic and API
+│   │   └── suggest.js         # Elasticsearch search logic
+│   ├── indexing/
+│   │   └── bulk_index.js      # Elasticsearch indexing
 │   └── config/
-│       └── es.js              # Configuration (optional)
+│       └── es.js              # Elasticsearch configuration
 ├── public/
 │   ├── index.html             # Main search interface
 │   └── demo.html              # Advanced demo with auto-typing
@@ -71,23 +86,26 @@ autosuggest-es/
 ├── package.json               # Dependencies and scripts
 ├── .env                       # Environment variables
 ├── .gitignore                 # Git ignore rules
+├── reindex.js                 # Data indexing script
 └── README.md                  # This file
 ```
 
 ## 🛠️ Technical Details
 
 ### Search Algorithm
-- **Prefix Matching**: Highest priority for words starting with query
-- **Fuzzy Matching**: Handles typos and partial words
-- **Multi-field Search**: Searches across title, category, and brand
-- **Scoring System**: Intelligent ranking based on relevance and popularity
-- **In-memory Processing**: All data loaded in RAM for instant responses
+- **Elasticsearch Integration**: Professional search engine with advanced indexing
+- **Prefix Matching**: Optimized for autocomplete with edge n-gram tokenization
+- **Fuzzy Matching**: Built-in typo tolerance and edit distance algorithms
+- **Multi-field Search**: Searches across title, category, and brand fields
+- **Scoring System**: Elasticsearch's built-in relevance scoring with custom boosts
+- **Synonym Support**: Configurable synonym mapping for better results
 
 ### Performance
-- **Response Time**: < 10ms average
-- **Memory Usage**: ~50MB (vs 700MB+ for Elasticsearch)
-- **Scalability**: Handles 10,000+ products efficiently
-- **No External Dependencies**: Pure Node.js implementation
+- **Response Time**: < 50ms average (network + processing)
+- **Indexing**: Efficient bulk indexing of 10,000+ products
+- **Scalability**: Elasticsearch handles millions of products efficiently
+- **Caching**: Built-in query result caching
+- **Real-time Updates**: Near real-time search index updates
 
 ### API Endpoints
 
@@ -143,22 +161,35 @@ Returns product suggestions for the given query.
 ## 🔧 Configuration
 
 ### Environment Variables
-Create a `.env` file:
+Create a `.env` file (copy from `.env.example`):
 ```env
+# Server Configuration
 PORT=3000
 NODE_ENV=development
+
+# Elasticsearch Configuration
+ES_HOST=localhost
+ES_PORT=9200
+ES_INDEX=products
+ES_USERNAME=
+ES_PASSWORD=
+
+# Search Configuration
+MAX_SUGGESTIONS=10
+SEARCH_DEBOUNCE=150
 ```
 
-### Search Parameters
-Modify these in `src/search/suggest.js`:
-```javascript
-const SEARCH_CONFIG = {
-  maxResults: 5,           // Max suggestions to return
-  debounceDelay: 150,      // ms delay for real-time search
-  fuzzyThreshold: 0.7,     // Fuzzy match sensitivity
-  popularityWeight: 0.1    // Popularity influence on scoring
-};
-```
+### Elasticsearch Setup
+1. **Download Elasticsearch**: https://www.elastic.co/downloads/elasticsearch
+2. **Start Elasticsearch**: Usually runs on `http://localhost:9200`
+3. **Verify Installation**: 
+   ```bash
+   curl -X GET "localhost:9200/"
+   ```
+4. **Index Data**: 
+   ```bash
+   npm run reindex
+   ```
 
 ## 📊 Performance Metrics
 
@@ -171,31 +202,43 @@ The demo page shows real-time metrics:
 ## 🚀 Deployment
 
 ### Local Development
-```bash
-npm run dev
-```
+1. **Start Elasticsearch**:
+   ```bash
+   # If using Docker
+   docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+   ```
+
+2. **Start the application**:
+   ```bash
+   npm run dev
+   ```
 
 ### Production
+1. **Set up Elasticsearch cluster** (cloud or on-premise)
+2. **Configure environment variables** for production
+3. **Deploy application**:
+   ```bash
+   npm run start
+   ```
+
+### Docker Deployment
+Use the included `docker-compose.yml` for full stack deployment:
 ```bash
-npm run start
+# Start both application and Elasticsearch
+docker-compose up -d
+
+# Application only (if you have external Elasticsearch)
+docker-compose up app
 ```
 
-### Docker (Optional)
-```dockerfile
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-EXPOSE 3000
-CMD ["npm", "start"]
-```
+### Cloud Deployment Options
+- **Heroku**: Use Heroku Elasticsearch add-on
+- **AWS**: Deploy with Amazon Elasticsearch Service
+- **Google Cloud**: Use Elastic Cloud integration
+- **Azure**: Azure Search or Elasticsearch Service
+- **Elastic Cloud**: Official managed Elasticsearch
 
-### Cloud Deployment
-- **Heroku**: Ready to deploy with included Procfile
-- **Vercel**: Works with serverless functions
-- **Railway**: Simple deployment with git integration
-- **DigitalOcean**: App Platform compatible
+**Note**: Ensure your Elasticsearch instance is accessible and properly configured before deploying the application.
 
 ## 🤝 Contributing
 
