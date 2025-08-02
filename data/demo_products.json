@@ -1,0 +1,356 @@
+[
+  {
+    "id": 1,
+    "title": "Apple iPhone 15 Pro Max (Natural Titanium, 256GB)",
+    "category": "electronics",
+    "brand": "Apple",
+    "originalPrice": 179900,
+    "currentPrice": 159900,
+    "discount": 11,
+    "rating": 4.6,
+    "reviewCount": 2847,
+    "popularity": 95,
+    "image": "/images/products/iphone-15-pro.svg",
+    "description": "Experience the iPhone 15 Pro Max with cutting-edge A17 Pro chip technology, stunning titanium design, and professional photography capabilities.",
+    "features": [
+      "A17 Pro chip",
+      "Action Button",
+      "USB-C connectivity",
+      "48MP Main Camera",
+      "ProRAW and ProRes video"
+    ],
+    "specifications": {
+      "Display": "6.7\" Super Retina XDR",
+      "Processor": "A17 Pro chip",
+      "RAM": "8GB",
+      "Storage": "256GB",
+      "Camera": "48MP + 12MP + 12MP",
+      "Battery": "4441mAh",
+      "OS": "iOS 17"
+    }
+  },
+  {
+    "id": 2,
+    "title": "Samsung Galaxy S24 Ultra (Titanium Black, 512GB)",
+    "category": "electronics",
+    "brand": "Samsung",
+    "originalPrice": 164999,
+    "currentPrice": 149999,
+    "discount": 9,
+    "rating": 4.5,
+    "reviewCount": 1923,
+    "popularity": 88,
+    "image": "/images/products/galaxy-s24-ultra.svg",
+    "description": "Samsung Galaxy S24 Ultra with revolutionary AI features, 200MP camera system, and built-in S Pen for ultimate productivity.",
+    "features": [
+      "200MP Camera",
+      "S Pen included",
+      "AI Features",
+      "Snapdragon 8 Gen 3",
+      "100W Fast Charging"
+    ],
+    "specifications": {
+      "Display": "6.8\" Dynamic AMOLED 2X",
+      "Processor": "Snapdragon 8 Gen 3",
+      "RAM": "12GB",
+      "Storage": "512GB",
+      "Camera": "200MP + 12MP + 10MP + 10MP",
+      "Battery": "5000mAh",
+      "OS": "Android 14"
+    }
+  },
+  {
+    "id": 3,
+    "title": "OnePlus 12 5G Mobile Phone (Flowy Emerald, 256GB)",
+    "category": "electronics",
+    "brand": "OnePlus",
+    "originalPrice": 74999,
+    "currentPrice": 64999,
+    "discount": 13,
+    "rating": 4.4,
+    "reviewCount": 1567,
+    "popularity": 82,
+    "image": "/images/products/oneplus-12.svg",
+    "description": "OnePlus 12 featuring flagship Snapdragon 8 Gen 3 processor, advanced 50MP triple camera system, and blazing fast 100W charging.",
+    "features": [
+      "Snapdragon 8 Gen 3",
+      "50MP Triple Camera",
+      "100W SuperVOOC charging",
+      "120Hz Display",
+      "OxygenOS 14"
+    ],
+    "specifications": {
+      "Display": "6.82\" LTPO AMOLED",
+      "Processor": "Snapdragon 8 Gen 3",
+      "RAM": "12GB",
+      "Storage": "256GB",
+      "Camera": "50MP + 64MP + 48MP",
+      "Battery": "5400mAh",
+      "OS": "OxygenOS 14"
+    }
+  },
+  {
+    "id": 4,
+    "title": "Xiaomi Redmi Note 13 Pro 5G Mobile (Midnight Black)",
+    "category": "electronics",
+    "brand": "Xiaomi",
+    "originalPrice": 26999,
+    "currentPrice": 23999,
+    "discount": 11,
+    "rating": 4.2,
+    "reviewCount": 2456,
+    "popularity": 78,
+    "image": "/images/products/redmi-note-13.svg",
+    "description": "Redmi Note 13 Pro 5G with impressive 200MP camera, 67W fast charging, and stunning AMOLED display for immersive experience.",
+    "features": [
+      "200MP Camera",
+      "67W Fast Charging",
+      "AMOLED Display",
+      "Dimensity 7200 Ultra",
+      "IP54 Rating"
+    ],
+    "specifications": {
+      "Display": "6.67\" AMOLED",
+      "Processor": "Dimensity 7200 Ultra",
+      "RAM": "8GB",
+      "Storage": "128GB",
+      "Camera": "200MP + 8MP + 2MP",
+      "Battery": "5100mAh",
+      "OS": "MIUI 14"
+    }
+  },
+  {
+    "id": 5,
+    "title": "Vivo V29 5G Smartphone (Himalayan Blue, 128GB)",
+    "category": "electronics",
+    "brand": "Vivo",
+    "originalPrice": 37999,
+    "currentPrice": 32999,
+    "discount": 13,
+    "rating": 4.3,
+    "reviewCount": 1234,
+    "popularity": 75,
+    "image": "/images/products/vivo-v29.svg",
+    "description": "Vivo V29 5G featuring advanced 50MP Eye Autofocus camera, 80W FlashCharge technology, and premium design with Ring Light.",
+    "features": [
+      "50MP Eye Autofocus Camera",
+      "80W FlashCharge",
+      "Ring Light",
+      "Dimensity 7200",
+      "Curved Display"
+    ],
+    "specifications": {
+      "Display": "6.78\" AMOLED",
+      "Processor": "Dimensity 7200",
+      "RAM": "8GB",
+      "Storage": "128GB",
+      "Camera": "50MP + 8MP + 2MP",
+      "Battery": "4600mAh",
+      "OS": "Funtouch OS 13"
+    }
+  },
+  {
+    "id": 6,
+    "title": "Dell XPS 13 Laptop (Intel i7, 16GB RAM, 512GB SSD)",
+    "category": "electronics",
+    "brand": "Dell",
+    "originalPrice": 99990,
+    "currentPrice": 89990,
+    "discount": 10,
+    "rating": 4.2,
+    "reviewCount": 1245,
+    "popularity": 71,
+    "image": "/images/products/dell-xps-13.svg",
+    "description": "Dell XPS 13 premium ultrabook with Intel 12th Gen processor, stunning InfinityEdge display, and exceptional build quality.",
+    "features": [
+      "13.4\" FHD+ display",
+      "Intel i7-1250U",
+      "Windows 11",
+      "InfinityEdge Display",
+      "Premium Build"
+    ],
+    "specifications": {
+      "Display": "13.4\" FHD+ InfinityEdge",
+      "Processor": "Intel Core i7-1250U",
+      "RAM": "16GB LPDDR5",
+      "Storage": "512GB SSD",
+      "Graphics": "Intel Iris Xe",
+      "Battery": "52Wh",
+      "OS": "Windows 11"
+    }
+  },
+  {
+    "id": 7,
+    "title": "Sony WH-1000XM5 Wireless Headphones",
+    "category": "electronics",
+    "brand": "Sony",
+    "originalPrice": 34990,
+    "currentPrice": 29990,
+    "discount": 14,
+    "rating": 4.7,
+    "reviewCount": 2156,
+    "popularity": 89,
+    "image": "/images/products/sony-headphones.svg",
+    "description": "Sony WH-1000XM5 with industry-leading noise canceling, 30-hour battery life, and premium sound quality.",
+    "features": [
+      "Industry-leading noise canceling",
+      "30hr battery",
+      "Quick Charge",
+      "Multipoint Connection",
+      "Speak-to-Chat"
+    ],
+    "specifications": {
+      "Driver": "30mm",
+      "Battery": "30 hours",
+      "Charging": "USB-C",
+      "Weight": "250g",
+      "Frequency": "4Hz-40kHz",
+      "Connectivity": "Bluetooth 5.2"
+    }
+  },
+  {
+    "id": 8,
+    "title": "Nike Air Force 1 '07 Sneakers",
+    "category": "fashion",
+    "brand": "Nike",
+    "originalPrice": 8995,
+    "currentPrice": 7495,
+    "discount": 17,
+    "rating": 4.3,
+    "reviewCount": 856,
+    "popularity": 85,
+    "image": "/images/products/nike-air-force.svg",
+    "description": "Classic Nike Air Force 1 sneakers with premium leather upper, Air cushioning, and timeless basketball-inspired design.",
+    "features": [
+      "Leather upper",
+      "Air cushioning",
+      "Classic design",
+      "Rubber outsole",
+      "Perforated toe box"
+    ],
+    "specifications": {
+      "Material": "Premium Leather",
+      "Sole": "Rubber",
+      "Closure": "Lace-up",
+      "Technology": "Nike Air",
+      "Style": "Basketball",
+      "Origin": "Inspired by 1982"
+    }
+  },
+  {
+    "id": 9,
+    "title": "Adidas Ultraboost 22 Running Shoes",
+    "category": "fashion",
+    "brand": "Adidas",
+    "originalPrice": 15999,
+    "currentPrice": 12999,
+    "discount": 19,
+    "rating": 4.4,
+    "reviewCount": 642,
+    "popularity": 80,
+    "image": "/images/products/adidas-ultraboost.svg",
+    "description": "Adidas Ultraboost 22 with responsive Boost midsole, Primeknit upper, and Continental rubber outsole for superior performance.",
+    "features": [
+      "Boost midsole",
+      "Primeknit upper",
+      "Continental rubber",
+      "Linear Energy Push",
+      "Stretchweb outsole"
+    ],
+    "specifications": {
+      "Material": "Primeknit",
+      "Midsole": "Boost",
+      "Outsole": "Continental Rubber",
+      "Drop": "10mm",
+      "Weight": "310g",
+      "Type": "Neutral Running"
+    }
+  },
+  {
+    "id": 10,
+    "title": "Levi's 511 Slim Fit Jeans",
+    "category": "fashion",
+    "brand": "Levi's",
+    "originalPrice": 3499,
+    "currentPrice": 2799,
+    "discount": 20,
+    "rating": 4.1,
+    "reviewCount": 534,
+    "popularity": 72,
+    "image": "/images/products/levis-jeans.svg",
+    "description": "Levi's 511 Slim Fit jeans with stretch denim, classic 5-pocket design, and modern slim fit for everyday comfort.",
+    "features": [
+      "Slim fit",
+      "Stretch denim",
+      "Classic 5-pocket design",
+      "Button fly",
+      "Machine washable"
+    ],
+    "specifications": {
+      "Fit": "Slim",
+      "Material": "99% Cotton, 1% Elastane",
+      "Rise": "Mid-rise",
+      "Leg Opening": "14.75\"",
+      "Inseam": "32\"",
+      "Care": "Machine Wash"
+    }
+  },
+  {
+    "id": 11,
+    "title": "The Psychology of Money by Morgan Housel",
+    "category": "books",
+    "brand": "Harriman House",
+    "originalPrice": 399,
+    "currentPrice": 299,
+    "discount": 25,
+    "rating": 4.8,
+    "reviewCount": 4521,
+    "popularity": 92,
+    "image": "/images/products/psychology-book.svg",
+    "description": "A timeless guide to wealth, greed, and happiness that explores the strange ways people think about money.",
+    "features": [
+      "Paperback",
+      "256 pages",
+      "Bestseller",
+      "Financial wisdom",
+      "Behavioral insights"
+    ],
+    "specifications": {
+      "Format": "Paperback",
+      "Pages": "256",
+      "Language": "English",
+      "Publisher": "Harriman House",
+      "ISBN": "9780857197689",
+      "Dimensions": "8.5 x 5.5 inches"
+    }
+  },
+  {
+    "id": 12,
+    "title": "Atomic Habits by James Clear",
+    "category": "books",
+    "brand": "Random House",
+    "originalPrice": 450,
+    "currentPrice": 350,
+    "discount": 22,
+    "rating": 4.7,
+    "reviewCount": 3245,
+    "popularity": 90,
+    "image": "/images/products/atomic-habits.svg",
+    "description": "A practical guide to building good habits and breaking bad ones, backed by scientific research and real-world examples.",
+    "features": [
+      "Hardcover",
+      "320 pages",
+      "Self-help bestseller",
+      "Habit formation",
+      "Practical strategies"
+    ],
+    "specifications": {
+      "Format": "Hardcover",
+      "Pages": "320",
+      "Language": "English",
+      "Publisher": "Random House",
+      "ISBN": "9780735211292",
+      "Dimensions": "9.3 x 6.4 inches"
+    }
+  }
+]

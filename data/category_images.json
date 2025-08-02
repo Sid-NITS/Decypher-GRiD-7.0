@@ -1,0 +1,44 @@
+{
+  "categoryImages": {
+    "electronics": [
+      "/images/products/iphone-15-pro.svg",
+      "/images/products/galaxy-s24-ultra.svg",
+      "/images/products/dell-xps-13.svg",
+      "/images/products/sony-headphones.svg",
+      "/images/products/macbook-air-m3.svg",
+      "/images/categories/electronics.svg"
+    ],
+    "fashion": [
+      "/images/products/nike-air-force.svg",
+      "/images/products/adidas-ultraboost.svg",
+      "/images/products/levis-jeans.svg",
+      "/images/categories/fashion.svg"
+    ],
+    "books": [
+      "/images/products/psychology-book.svg",
+      "/images/products/atomic-habits.svg",
+      "/images/categories/books.svg"
+    ],
+    "home": [
+      "/images/categories/electronics.svg",
+      "/images/categories/fashion.svg"
+    ],
+    "beauty": [
+      "/images/categories/fashion.svg",
+      "/images/categories/electronics.svg"
+    ],
+    "sports": [
+      "/images/products/nike-air-force.svg",
+      "/images/products/adidas-ultraboost.svg"
+    ]
+  },
+  "defaultFallbacks": {
+    "electronics": "/images/categories/electronics.svg",
+    "fashion": "/images/categories/fashion.svg",
+    "books": "/images/categories/books.svg",
+    "home": "/images/categories/electronics.svg",
+    "beauty": "/images/categories/fashion.svg",
+    "sports": "/images/categories/fashion.svg",
+    "general": "/images/categories/electronics.svg"
+  }
+}

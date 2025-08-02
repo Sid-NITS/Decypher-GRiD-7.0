@@ -92,6 +92,47 @@ app.get('/api/product/:id/related', (req, res) => {
   }
 });
 
+// Serve data files
+app.get('/api/data/demo-products', (req, res) => {
+  try {
+    const demoProducts = require('../data/demo_products.json');
+    res.json(demoProducts);
+  } catch (error) {
+    console.error('Error loading demo products:', error);
+    res.status(500).json({ error: 'Failed to load demo products' });
+  }
+});
+
+app.get('/api/data/featured-products', (req, res) => {
+  try {
+    const featuredProducts = require('../data/featured_products.json');
+    res.json(featuredProducts);
+  } catch (error) {
+    console.error('Error loading featured products:', error);
+    res.status(500).json({ error: 'Failed to load featured products' });
+  }
+});
+
+app.get('/api/data/category-images', (req, res) => {
+  try {
+    const categoryImages = require('../data/category_images.json');
+    res.json(categoryImages);
+  } catch (error) {
+    console.error('Error loading category images:', error);
+    res.status(500).json({ error: 'Failed to load category images' });
+  }
+});
+
+app.get('/api/data/demo-suggestions', (req, res) => {
+  try {
+    const demoSuggestions = require('../data/demo_suggestions.json');
+    res.json(demoSuggestions);
+  } catch (error) {
+    console.error('Error loading demo suggestions:', error);
+    res.status(500).json({ error: 'Failed to load demo suggestions' });
+  }
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({
