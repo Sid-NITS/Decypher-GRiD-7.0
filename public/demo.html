@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Search Demo</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .demo-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #e9ecef;
+        }
+
+        .demo-section h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .auto-suggestions {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .suggestion {
+            padding: 10px 15px;
+            border-bottom: 1px solid #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .suggestion:hover {
+            background-color: #f8f9fa;
+        }
+
+        .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .product-name {
+            font-weight: 500;
+            color: #212529;
+        }
+
+        .product-info {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .typing-demo {
+            margin-bottom: 20px;
+        }
+
+        .demo-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .demo-btn {
+            padding: 8px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.2s;
+        }
+
+        .demo-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        .performance-metrics {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="header">
+            <h1>⚡ Real-time Search Demo</h1>
+            <p>Experience instant product suggestions as you type - just like Flipkart!</p>
+        </div>
+
+        <div class="demo-grid">
+            <!-- Manual Search -->
+            <div class="demo-section">
+                <h3>🖐️ Manual Search</h3>
+                <p>Type manually to see instant suggestions:</p>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="manualSearch" placeholder="Type: laptop, banana, shirt...">
+                </div>
+                <div class="auto-suggestions" id="manualSuggestions" style="display: none;"></div>
+                <div class="stats">
+                    <span id="manualStats">Ready to search...</span>
+                    <span id="manualTiming"></span>
+                </div>
+            </div>
+
+            <!-- Auto Typing Demo -->
+            <div class="demo-section">
+                <h3>🤖 Auto Typing Demo</h3>
+                <p>Watch automated typing with real-time suggestions:</p>
+                <div class="demo-controls">
+                    <button class="demo-btn" onclick="demoManager.startDemo('laptop')">Demo: laptop</button>
+                    <button class="demo-btn" onclick="demoManager.startDemo('banana')">Demo: banana</button>
+                    <button class="demo-btn" onclick="demoManager.startDemo('smartphone')">Demo: smartphone</button>
+                    <button class="demo-btn" onclick="demoManager.stopDemo()">Stop</button>
+                </div>
+                <div class="search-box">
+                    <input type="text" class="search-input" id="autoSearch" readonly>
+                </div>
+                <div class="auto-suggestions" id="autoSuggestions" style="display: none;"></div>
+                <div class="stats">
+                    <span id="autoStats">Click a demo button to start</span>
+                    <span id="autoTiming"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="performance-metrics">
+            <h3>📊 Performance Metrics</h3>
+            <div class="metrics-grid">
+                <div class="metric">
+                    <div class="metric-value" id="totalRequests">0</div>
+                    <div class="metric-label">Total Requests</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="avgResponseTime">0ms</div>
+                    <div class="metric-label">Avg Response Time</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="successRate">100%</div>
+                    <div class="metric-label">Success Rate</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-value" id="totalProducts">10K</div>
+                    <div class="metric-label">Products in DB</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class RealTimeSearchDemo {
+            constructor() {
+                this.manualSearch = document.getElementById('manualSearch');
+                this.autoSearch = document.getElementById('autoSearch');
+                this.manualSuggestions = document.getElementById('manualSuggestions');
+                this.autoSuggestions = document.getElementById('autoSuggestions');
+                
+                this.totalRequests = 0;
+                this.totalResponseTime = 0;
+                this.successfulRequests = 0;
+                this.demoTimeout = null;
+                this.typingTimeout = null;
+                
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                let debounceTimeout = null;
+                
+                this.manualSearch.addEventListener('input', (e) => {
+                    clearTimeout(debounceTimeout);
+                    debounceTimeout = setTimeout(() => {
+                        this.searchProducts(e.target.value, 'manual');
+                    }, 100);
+                });
+
+                this.manualSearch.addEventListener('focus', () => {
+                    if (this.manualSearch.value) {
+                        this.manualSuggestions.style.display = 'block';
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.demo-section')) {
+                        this.manualSuggestions.style.display = 'none';
+                        this.autoSuggestions.style.display = 'none';
+                    }
+                });
+            }
+
+            async searchProducts(query, type) {
+                if (!query.trim()) {
+                    this.hideSuggestions(type);
+                    return;
+                }
+
+                const startTime = performance.now();
+                this.updateStats(`Searching for "${query}"...`, type);
+
+                try {
+                    const response = await fetch(`http://localhost:3000/api/suggest?q=${encodeURIComponent(query)}`);
+                    const endTime = performance.now();
+                    const responseTime = Math.round(endTime - startTime);
+
+                    this.totalRequests++;
+                    this.totalResponseTime += responseTime;
+                    this.successfulRequests++;
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    let products = Array.isArray(data) ? data : (data.results || []);
+
+                    this.displaySuggestions(products, query, type, responseTime);
+                    this.updateMetrics();
+
+                } catch (error) {
+                    this.totalRequests++;
+                    this.updateMetrics();
+                    this.showError(error.message, type);
+                }
+            }
+
+            displaySuggestions(products, query, type, responseTime) {
+                const suggestionsContainer = type === 'manual' ? this.manualSuggestions : this.autoSuggestions;
+                
+                if (products.length === 0) {
+                    suggestionsContainer.innerHTML = '<div class="suggestion">No products found</div>';
+                } else {
+                    const suggestionsHTML = products.map(product => `
+                        <div class="suggestion" onclick="demoManager.selectProduct('${product.title}', '${type}')">
+                            <div class="product-name">${this.highlightMatch(product.title, query)}</div>
+                            <div class="product-info">
+                                ${product.category} • ${product.brand} • Score: ${(product.score || 0).toFixed(1)}
+                            </div>
+                        </div>
+                    `).join('');
+                    
+                    suggestionsContainer.innerHTML = suggestionsHTML;
+                }
+
+                suggestionsContainer.style.display = 'block';
+                this.updateStats(`Found ${products.length} products (${responseTime}ms)`, type);
+            }
+
+            highlightMatch(text, query) {
+                if (!query) return text;
+                const regex = new RegExp(`(${query})`, 'gi');
+                return text.replace(regex, '<span style="background: yellow; font-weight: bold;">$1</span>');
+            }
+
+            selectProduct(title, type) {
+                if (type === 'manual') {
+                    this.manualSearch.value = title;
+                } else {
+                    this.autoSearch.value = title;
+                }
+                this.hideSuggestions(type);
+            }
+
+            hideSuggestions(type) {
+                if (type === 'manual') {
+                    this.manualSuggestions.style.display = 'none';
+                } else {
+                    this.autoSuggestions.style.display = 'none';
+                }
+            }
+
+            showError(message, type) {
+                const suggestionsContainer = type === 'manual' ? this.manualSuggestions : this.autoSuggestions;
+                suggestionsContainer.innerHTML = `<div class="suggestion">❌ ${message}</div>`;
+                suggestionsContainer.style.display = 'block';
+                this.updateStats(`Error: ${message}`, type);
+            }
+
+            updateStats(message, type) {
+                const statsElement = document.getElementById(`${type}Stats`);
+                if (statsElement) {
+                    statsElement.textContent = message;
+                }
+            }
+
+            updateMetrics() {
+                document.getElementById('totalRequests').textContent = this.totalRequests;
+                
+                const avgResponseTime = this.totalRequests > 0 ? 
+                    Math.round(this.totalResponseTime / this.totalRequests) : 0;
+                document.getElementById('avgResponseTime').textContent = `${avgResponseTime}ms`;
+                
+                const successRate = this.totalRequests > 0 ? 
+                    Math.round((this.successfulRequests / this.totalRequests) * 100) : 100;
+                document.getElementById('successRate').textContent = `${successRate}%`;
+            }
+
+            // Auto typing demo functionality
+            startDemo(word) {
+                this.stopDemo();
+                this.autoSearch.value = '';
+                this.hideSuggestions('auto');
+                
+                this.updateStats(`Starting demo for "${word}"...`, 'auto');
+                
+                let index = 0;
+                const typeNextChar = () => {
+                    if (index < word.length) {
+                        this.autoSearch.value = word.substring(0, index + 1);
+                        this.searchProducts(this.autoSearch.value, 'auto');
+                        index++;
+                        this.typingTimeout = setTimeout(typeNextChar, 300); // 300ms between characters
+                    } else {
+                        this.updateStats(`Demo completed for "${word}"`, 'auto');
+                    }
+                };
+                
+                this.typingTimeout = setTimeout(typeNextChar, 500);
+            }
+
+            stopDemo() {
+                if (this.typingTimeout) {
+                    clearTimeout(this.typingTimeout);
+                    this.typingTimeout = null;
+                }
+                this.updateStats('Demo stopped', 'auto');
+            }
+        }
+
+        // Initialize the demo
+        const demoManager = new RealTimeSearchDemo();
+
+        // Add some initial helpful messages
+        setTimeout(() => {
+            console.log('🚀 Real-time Search Demo Ready!');
+            console.log('💡 Try typing in the manual search box');
+            console.log('🤖 Or click the demo buttons for auto-typing');
+        }, 1000);
+    </script>
+</body>
+</html>

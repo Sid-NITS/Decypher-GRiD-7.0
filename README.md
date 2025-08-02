@@ -212,8 +212,9 @@ cluster.routing.allocation.disk.threshold_enabled: false
 **Quick Start Commands:**
 ```bash
 # 1. Start Elasticsearch 9.1.0 (with above configuration)
-# Download from: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-9.1.0-linux-x86_64.tar.gz
-./elasticsearch-9.1.0/bin/elasticsearch
+# Download from: https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-9.1.0-windows-x86_64.zip
+cd elasticsearch-9.1.0-windows-x86_64\elasticsearch-9.1.0/bin
+./elasticsearch.bat
 
 # 2. Install and run DeCypher
 npm install

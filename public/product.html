@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - AutoSuggest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f1f3f6;
+            line-height: 1.6;
+            color: #212121;
+        }
+
+        /* Header */
+        .header {
+            background: #2874f0;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .header-content {
+            max-width: 1248px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            min-width: 140px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        .logo-plus {
+            font-size: 11px;
+            color: #ffe500;
+            margin-left: 2px;
+        }
+
+        .logo-subtitle {
+            font-size: 11px;
+            color: white;
+            font-style: italic;
+            margin-left: 8px;
+        }
+
+        /* Search Container */
+        .search-container {
+            flex: 1;
+            max-width: 520px;
+            position: relative;
+            margin: 0 16px;
+        }
+
+        .search-box {
+            position: relative;
+            display: flex;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 16px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            border-radius: 2px 0 0 2px;
+            background: white;
+        }
+
+        .search-button {
+            background: #fb641b;
+            border: none;
+            padding: 0 24px;
+            color: white;
+            cursor: pointer;
+            border-radius: 0 2px 2px 0;
+            font-size: 16px;
+        }
+
+        /* Navigation */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-left: auto;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background: white;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .breadcrumb-content {
+            max-width: 1248px;
+            margin: 0 auto;
+            padding: 0 16px;
+            font-size: 12px;
+            color: #878787;
+        }
+
+        .breadcrumb a {
+            color: #2874f0;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1248px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            width: 400px;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            padding: 16px;
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 400px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .main-image i {
+            font-size: 64px;
+            color: #e0e0e0;
+        }
+
+        .image-thumbnails {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .thumbnail {
+            width: 60px;
+            height: 60px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail.active {
+            border-color: #2874f0;
+        }
+
+        .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* Product Info */
+        .product-info {
+            flex: 1;
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            padding: 24px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .rating-badge {
+            background: #388e3c;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            color: #878787;
+        }
+
+        .rating-link {
+            color: #2874f0;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .price-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .price-current {
+            font-size: 28px;
+            font-weight: 500;
+            color: #212121;
+            margin-right: 16px;
+        }
+
+        .price-original {
+            font-size: 18px;
+            color: #878787;
+            text-decoration: line-through;
+            margin-right: 16px;
+        }
+
+        .price-discount {
+            font-size: 14px;
+            color: #388e3c;
+            font-weight: 500;
+        }
+
+        .price-savings {
+            font-size: 14px;
+            color: #388e3c;
+            margin-top: 4px;
+        }
+
+        /* Offers */
+        .offers-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #212121;
+            margin-bottom: 12px;
+        }
+
+        .offer-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .offer-icon {
+            color: #388e3c;
+            width: 16px;
+        }
+
+        /* Delivery */
+        .delivery-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .delivery-input {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .pincode-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 2px;
+            font-size: 14px;
+        }
+
+        .check-btn {
+            background: #2874f0;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .delivery-info {
+            font-size: 14px;
+            color: #388e3c;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: #ff9f00;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 2px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: #fb641b;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 2px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-wishlist {
+            background: white;
+            color: #878787;
+            border: 1px solid #e0e0e0;
+            padding: 16px 24px;
+            border-radius: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Highlights */
+        .highlights-section {
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .highlights-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .highlights-section li {
+            padding: 4px 0;
+            font-size: 14px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .highlights-section li:before {
+            content: '•';
+            color: #2874f0;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Specifications */
+        .specifications {
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            margin-top: 16px;
+            padding: 24px;
+        }
+
+        .spec-table {
+            width: 100%;
+        }
+
+        .spec-row {
+            display: flex;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label {
+            width: 200px;
+            font-weight: 500;
+            color: #878787;
+            font-size: 14px;
+        }
+
+        .spec-value {
+            flex: 1;
+            color: #212121;
+            font-size: 14px;
+        }
+
+        /* Reviews */
+        .reviews-section {
+            background: white;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            margin-top: 16px;
+            padding: 24px;
+        }
+
+        .review-summary {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .review-score {
+            text-align: center;
+        }
+
+        .score-number {
+            font-size: 36px;
+            font-weight: 500;
+            color: #212121;
+        }
+
+        .score-stars {
+            color: #388e3c;
+            margin: 4px 0;
+        }
+
+        .score-text {
+            font-size: 12px;
+            color: #878787;
+        }
+
+        .review-breakdown {
+            flex: 1;
+        }
+
+        .rating-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+
+        .bar-label {
+            width: 20px;
+            color: #878787;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            background: #388e3c;
+        }
+
+        .bar-count {
+            width: 40px;
+            text-align: right;
+            color: #878787;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .search-container {
+                order: 3;
+                flex-basis: 100%;
+                margin: 8px 0 0 0;
+            }
+
+            .nav-links {
+                margin-left: auto;
+                gap: 16px;
+            }
+
+            .nav-link span {
+                display: none;
+            }
+
+            .main-content {
+                flex-direction: column;
+                padding: 8px;
+            }
+
+            .product-gallery {
+                width: 100%;
+                position: static;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                flex: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <span class="logo-text">AutoSuggest</span>
+                <span class="logo-plus">+</span>
+                <span class="logo-subtitle">Explore Plus</span>
+            </a>
+
+            <div class="search-container">
+                <form class="search-box" id="searchForm">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        id="searchInput"
+                        placeholder="Search for products, brands and more"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="search-button">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+            </div>
+
+            <nav class="nav-links">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Login</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-heart"></i>
+                    <span>Wishlist</span>
+                </a>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="breadcrumb-content">
+            <a href="/">Home</a> / <a href="/search.html">Search</a> / <span id="productCategory">Electronics</span> / <span id="breadcrumbTitle">Product</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Product Gallery -->
+        <section class="product-gallery">
+            <div class="main-image" id="mainImage">
+                <i class="fas fa-image"></i>
+            </div>
+            <div class="image-thumbnails" id="thumbnails">
+                <!-- Thumbnails will be populated here -->
+            </div>
+        </section>
+
+        <!-- Product Info -->
+        <section class="product-info">
+            <h1 class="product-title" id="productTitle">Loading product...</h1>
+            
+            <div class="product-rating" id="productRating">
+                <div class="rating-badge">
+                    <span id="ratingValue">4.3</span>
+                    <i class="fas fa-star"></i>
+                </div>
+                <span class="rating-text" id="ratingCount">2,834 ratings and 312 reviews</span>
+                <a href="#reviews" class="rating-link">View all reviews</a>
+            </div>
+
+            <div class="price-section">
+                <div>
+                    <span class="price-current" id="currentPrice">₹12,999</span>
+                    <span class="price-original" id="originalPrice">₹16,999</span>
+                    <span class="price-discount" id="discount">23% off</span>
+                </div>
+                <div class="price-savings" id="savings">You save ₹4,000</div>
+            </div>
+
+            <div class="offers-section">
+                <h3 class="section-title">Available offers</h3>
+                <div class="offer-item">
+                    <i class="fas fa-tag offer-icon"></i>
+                    <span>Bank Offer: 10% off on HDFC Bank Credit Card, up to ₹1,500</span>
+                </div>
+                <div class="offer-item">
+                    <i class="fas fa-percentage offer-icon"></i>
+                    <span>Special Price: Get extra 5% off (price inclusive of discount)</span>
+                </div>
+                <div class="offer-item">
+                    <i class="fas fa-gift offer-icon"></i>
+                    <span>No Cost EMI: Avail No Cost EMI on select cards for orders above ₹3,000</span>
+                </div>
+            </div>
+
+            <div class="delivery-section">
+                <h3 class="section-title">Delivery</h3>
+                <div class="delivery-input">
+                    <input type="text" class="pincode-input" placeholder="Enter pincode" id="pincodeInput">
+                    <button class="check-btn" onclick="checkDelivery()">Check</button>
+                </div>
+                <div class="delivery-info" id="deliveryInfo">
+                    Free delivery available • Fastest delivery by tomorrow
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-primary">
+                    <i class="fas fa-shopping-cart"></i>
+                    ADD TO CART
+                </button>
+                <button class="btn-secondary">
+                    <i class="fas fa-bolt"></i>
+                    BUY NOW
+                </button>
+                <button class="btn-wishlist">
+                    <i class="far fa-heart"></i>
+                </button>
+            </div>
+
+            <div class="highlights-section">
+                <h3 class="section-title">Highlights</h3>
+                <ul id="highlights">
+                    <li>6.1-inch Super Retina XDR display</li>
+                    <li>Cinematic mode for recording videos with shallow depth of field</li>
+                    <li>Advanced dual-camera system with 12MP Wide and Ultra Wide cameras</li>
+                    <li>12MP TrueDepth front camera with Portrait mode</li>
+                    <li>A15 Bionic chip for lightning-fast performance</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <!-- Specifications -->
+    <section class="specifications">
+        <h2 class="section-title">Specifications</h2>
+        <div class="spec-table" id="specifications">
+            <div class="spec-row">
+                <div class="spec-label">Brand</div>
+                <div class="spec-value" id="specBrand">Apple</div>
+            </div>
+            <div class="spec-row">
+                <div class="spec-label">Model</div>
+                <div class="spec-value" id="specModel">iPhone 13</div>
+            </div>
+            <div class="spec-row">
+                <div class="spec-label">Storage</div>
+                <div class="spec-value" id="specStorage">128 GB</div>
+            </div>
+            <div class="spec-row">
+                <div class="spec-label">Display Size</div>
+                <div class="spec-value" id="specDisplay">6.1 inch</div>
+            </div>
+            <div class="spec-row">
+                <div class="spec-label">Operating System</div>
+                <div class="spec-value" id="specOS">iOS 15</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="reviews-section" id="reviews">
+        <h2 class="section-title">Ratings & Reviews</h2>
+        <div class="review-summary">
+            <div class="review-score">
+                <div class="score-number" id="overallRating">4.3</div>
+                <div class="score-stars">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                </div>
+                <div class="score-text" id="totalReviews">2,834 ratings & 312 reviews</div>
+            </div>
+            <div class="review-breakdown">
+                <div class="rating-bar">
+                    <span class="bar-label">5 ★</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 65%"></div>
+                    </div>
+                    <span class="bar-count">1,842</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="bar-label">4 ★</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 20%"></div>
+                    </div>
+                    <span class="bar-count">567</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="bar-label">3 ★</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 10%"></div>
+                    </div>
+                    <span class="bar-count">283</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="bar-label">2 ★</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 3%"></div>
+                    </div>
+                    <span class="bar-count">85</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="bar-label">1 ★</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 2%"></div>
+                    </div>
+                    <span class="bar-count">57</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Get product ID from URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const productId = getUrlParameter('id');
+            if (productId) {
+                loadProduct(productId);
+            } else {
+                // Load demo product
+                loadDemoProduct();
+            }
+        });
+
+        // Load product data
+        async function loadProduct(productId) {
+            try {
+                const response = await fetch(`/api/product/${productId}`);
+                const product = await response.json();
+                displayProduct(product);
+            } catch (error) {
+                console.error('Error loading product:', error);
+                loadDemoProduct();
+            }
+        }
+
+        // Load demo product for demonstration
+        function loadDemoProduct() {
+            const demoProduct = {
+                id: 'demo-1',
+                title: 'Apple iPhone 13 (128GB) - Blue',
+                brand: 'Apple',
+                model: 'iPhone 13',
+                category: 'Electronics',
+                price: 12999,
+                originalPrice: 16999,
+                rating: 4.3,
+                ratingCount: 2834,
+                reviewCount: 312,
+                images: [
+                    'https://via.placeholder.com/400x400/007acc/ffffff?text=iPhone+13',
+                    'https://via.placeholder.com/400x400/ff6b6b/ffffff?text=Back+View',
+                    'https://via.placeholder.com/400x400/4ecdc4/ffffff?text=Side+View'
+                ],
+                highlights: [
+                    '6.1-inch Super Retina XDR display',
+                    'Cinematic mode for recording videos with shallow depth of field',
+                    'Advanced dual-camera system with 12MP Wide and Ultra Wide cameras',
+                    '12MP TrueDepth front camera with Portrait mode',
+                    'A15 Bionic chip for lightning-fast performance'
+                ],
+                specifications: {
+                    brand: 'Apple',
+                    model: 'iPhone 13',
+                    storage: '128 GB',
+                    display: '6.1 inch',
+                    os: 'iOS 15',
+                    color: 'Blue',
+                    warranty: '1 Year'
+                }
+            };
+            displayProduct(demoProduct);
+        }
+
+        // Display product information
+        function displayProduct(product) {
+            // Update title and breadcrumb
+            document.getElementById('productTitle').textContent = product.title;
+            document.getElementById('breadcrumbTitle').textContent = product.title;
+            document.getElementById('productCategory').textContent = product.category;
+            document.title = `${product.title} - AutoSuggest`;
+
+            // Update pricing
+            const discount = Math.floor(((product.originalPrice - product.price) / product.originalPrice) * 100);
+            const savings = product.originalPrice - product.price;
+            
+            document.getElementById('currentPrice').textContent = `₹${product.price.toLocaleString()}`;
+            document.getElementById('originalPrice').textContent = `₹${product.originalPrice.toLocaleString()}`;
+            document.getElementById('discount').textContent = `${discount}% off`;
+            document.getElementById('savings').textContent = `You save ₹${savings.toLocaleString()}`;
+
+            // Update rating
+            document.getElementById('ratingValue').textContent = product.rating.toFixed(1);
+            document.getElementById('ratingCount').textContent = `${product.ratingCount} ratings and ${product.reviewCount} reviews`;
+            document.getElementById('overallRating').textContent = product.rating.toFixed(1);
+            document.getElementById('totalReviews').textContent = `${product.ratingCount} ratings & ${product.reviewCount} reviews`;
+
+            // Update images
+            updateProductImages(product.images);
+
+            // Update highlights
+            if (product.highlights) {
+                const highlightsList = document.getElementById('highlights');
+                highlightsList.innerHTML = product.highlights.map(highlight => `<li>${highlight}</li>`).join('');
+            }
+
+            // Update specifications
+            if (product.specifications) {
+                updateSpecifications(product.specifications);
+            }
+        }
+
+        // Update product images
+        function updateProductImages(images) {
+            const mainImage = document.getElementById('mainImage');
+            const thumbnails = document.getElementById('thumbnails');
+
+            if (images && images.length > 0) {
+                // Set main image
+                mainImage.innerHTML = `<img src="${images[0]}" alt="Product Image">`;
+
+                // Set thumbnails
+                thumbnails.innerHTML = images.map((image, index) => `
+                    <div class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${image}', ${index})">
+                        <img src="${image}" alt="Thumbnail ${index + 1}">
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Change main image
+        function changeMainImage(imageSrc, index) {
+            document.getElementById('mainImage').innerHTML = `<img src="${imageSrc}" alt="Product Image">`;
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        // Update specifications
+        function updateSpecifications(specs) {
+            if (specs.brand) document.getElementById('specBrand').textContent = specs.brand;
+            if (specs.model) document.getElementById('specModel').textContent = specs.model;
+            if (specs.storage) document.getElementById('specStorage').textContent = specs.storage;
+            if (specs.display) document.getElementById('specDisplay').textContent = specs.display;
+            if (specs.os) document.getElementById('specOS').textContent = specs.os;
+        }
+
+        // Check delivery
+        function checkDelivery() {
+            const pincode = document.getElementById('pincodeInput').value;
+            const deliveryInfo = document.getElementById('deliveryInfo');
+            
+            if (pincode.length === 6) {
+                deliveryInfo.innerHTML = `
+                    <i class="fas fa-truck"></i> Free delivery by tomorrow to ${pincode}<br>
+                    <i class="fas fa-undo"></i> 7 days replacement policy<br>
+                    <i class="fas fa-dollar-sign"></i> Cash on delivery available
+                `;
+            } else {
+                deliveryInfo.textContent = 'Please enter a valid 6-digit pincode';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            if (query) {
+                window.location.href = `/search.html?q=${encodeURIComponent(query)}`;
+            }
+        });
+
+        // Add to cart
+        document.querySelector('.btn-primary').addEventListener('click', () => {
+            // Add to cart logic here
+            alert('Product added to cart!');
+        });
+
+        // Buy now
+        document.querySelector('.btn-secondary').addEventListener('click', () => {
+            // Buy now logic here
+            alert('Redirecting to checkout...');
+        });
+
+        // Wishlist
+        document.querySelector('.btn-wishlist').addEventListener('click', (e) => {
+            const icon = e.currentTarget.querySelector('i');
+            if (icon.classList.contains('far')) {
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+                e.currentTarget.style.color = '#ff6b6b';
+            } else {
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+                e.currentTarget.style.color = '#878787';
+            }
+        });
+    </script>
+</body>
+</html>
