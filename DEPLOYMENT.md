@@ -1,14 +1,15 @@
-# Deployment Guide
+# Enhanced Product Search Deployment Guide
 
-This guide covers different deployment options for the Realtime Product Search system.
+This guide covers different deployment options for the Enhanced Realtime Product Search system with intelligent suggestions and comprehensive product data.
 
 ## 🚀 Quick Deploy Options
 
 ### 1. **Heroku (Recommended for beginners)**
 
 **Prerequisites:**
-- Heroku account
+- Heroku account  
 - Heroku CLI installed
+- Elasticsearch add-on or external Elasticsearch service
 
 **Steps:**
 ```bash
@@ -16,7 +17,10 @@ This guide covers different deployment options for the Realtime Product Search s
 heroku login
 
 # Create new app
-heroku create your-app-name
+heroku create your-enhanced-search-app
+
+# Add Elasticsearch add-on (recommended)
+heroku addons:create bonsai:sandbox-10
 
 # Set environment variables
 heroku config:set NODE_ENV=production
@@ -24,6 +28,9 @@ heroku config:set PORT=3000
 
 # Deploy
 git push heroku main
+
+# Index the comprehensive product data
+heroku run npm run reindex
 
 # Open app
 heroku open

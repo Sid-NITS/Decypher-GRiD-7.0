@@ -1,7 +1,7 @@
 {
-  "name": "realtime-product-search",
-  "version": "1.0.0",
-  "description": "A lightning-fast, real-time product search system with autocomplete functionality - Flipkart Grid 7.0 submission",
+  "name": "enhanced-realtime-product-search",
+  "version": "2.0.0",
+  "description": "An enhanced lightning-fast, real-time product search system with intelligent autocomplete, smart synonyms, and comprehensive product data - Flipkart Grid 7.0 finale submission",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
@@ -17,13 +17,17 @@
     "autocomplete",
     "realtime",
     "product-search",
+    "intelligent-suggestions",
+    "smart-synonyms",
     "nodejs",
     "express",
     "javascript",
     "flipkart-grid",
     "e-commerce",
     "elasticsearch",
-    "fuzzy-search"
+    "fuzzy-search",
+    "typo-tolerance",
+    "enhanced-search"
   ],
   "author": "Flipkart Grid 7.0 Team",
   "license": "MIT",

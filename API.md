@@ -1,52 +1,83 @@
-# API Documentation
+# Enhanced API Documentation
+
+## Overview
+
+The Enhanced Product Search API provides intelligent, real-time product search with smart synonym expansion, typo tolerance, and comprehensive product data.
 
 ## Base URL
 ```
 http://localhost:3000
 ```
 
+## 🆕 Enhanced Features
+
+### Smart Search Intelligence
+- **Intelligent Synonyms**: "mob" → mobile phones, "lapp" → laptops
+- **Typo Tolerance**: "mobiile" → mobile suggestions
+- **Category Priority**: Ultra-high scoring for relevant categories
+- **Unified Algorithm**: Same logic for suggestions and search results
+
+### Rich Product Data
+- Complete product information with prices, ratings, images
+- Comprehensive metadata including features, delivery info, discounts
+- Enhanced scoring for better relevance
+
 ## Endpoints
 
-### 1. Search Suggestions
-Get real-time product suggestions based on user input.
+### 1. Enhanced Search Suggestions
+Get intelligent, real-time product suggestions with smart synonym expansion and category prioritization.
 
 **Endpoint:** `GET /api/suggest`
 
+**Enhanced Features:**
+- Smart synonym expansion ("mob" → mobile phones)
+- Typo tolerance ("mobiile" → mobile suggestions)  
+- Category-aware scoring with ultra-high boosts
+- Rich highlighting of matched terms
+
 **Parameters:**
 - `q` (required): Search query string
-- `limit` (optional): Maximum number of suggestions (default: 10)
+- `limit` (optional): Maximum number of suggestions (default: 8)
 
-**Example Request:**
+**Example Requests:**
 ```bash
-curl "http://localhost:3000/api/suggest?q=laptop&limit=5"
+# Smart mobile device search
+curl "http://localhost:3000/api/suggest?q=mob"
+
+# Typo tolerance demonstration
+curl "http://localhost:3000/api/suggest?q=mobiile"
+
+# Laptop search with intelligent expansion
+curl "http://localhost:3000/api/suggest?q=lapp"
 ```
 
-**Example Response:**
+**Enhanced Response Format:**
 ```json
-{
-  "success": true,
-  "query": "laptop",
-  "suggestions": [
-    {
-      "id": 1001,
-      "title": "Apple MacBook Pro 16-inch",
-      "category": "Electronics > Laptops",
-      "brand": "Apple",
-      "popularity": 95,
-      "score": 98.5
-    },
-    {
-      "id": 1002,
-      "title": "Dell XPS 13 Laptop",
-      "category": "Electronics > Laptops",
-      "brand": "Dell",
-      "popularity": 88,
-      "score": 92.3
+[
+  {
+    "id": "24",
+    "title": "Vivo Note 1RACUR",
+    "category": "Electronics > Smartphones",
+    "brand": "Vivo",
+    "popularity": 100,
+    "score": 349.3263,
+    "highlight": {
+      "category": ["Electronics > <em>Smartphones</em>"],
+      "title": ["Vivo Note 1RACUR"]
     }
-  ],
-  "total": 2,
-  "processing_time": "15ms"
-}
+  },
+  {
+    "id": "58", 
+    "title": "Apple Inspiron SUT4NX",
+    "category": "Electronics > Laptops",
+    "brand": "Apple",
+    "popularity": 100,
+    "score": 314.9323,
+    "highlight": {
+      "category": ["Electronics > <em>Laptops</em>"]
+    }
+  }
+]
 ```
 
 **Response Fields:**

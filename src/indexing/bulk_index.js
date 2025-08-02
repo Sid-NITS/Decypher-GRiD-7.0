@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const products = JSON.parse(
-  fs.readFileSync(path.join(__dirname, '../../data/products.json'), 'utf-8')
+  fs.readFileSync(path.join(__dirname, '../../data/comprehensive_products.json'), 'utf-8')
 );
 
 async function bulkIndex() {
