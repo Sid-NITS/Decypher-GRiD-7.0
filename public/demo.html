@@ -272,9 +272,22 @@
                 
                 this.manualSearch.addEventListener('input', (e) => {
                     clearTimeout(debounceTimeout);
+                    const query = e.target.value.trim();
+                    if (query.length < 1) {
+                        this.hideSuggestions('manual');
+                        return;
+                    }
                     debounceTimeout = setTimeout(() => {
-                        this.searchProducts(e.target.value, 'manual');
+                        this.searchProducts(query, 'manual');
                     }, 100);
+                });
+
+                this.manualSearch.addEventListener('keyup', (e) => {
+                    const query = e.target.value.trim();
+                    if (query.length < 1) {
+                        clearTimeout(debounceTimeout);
+                        this.hideSuggestions('manual');
+                    }
                 });
 
                 this.manualSearch.addEventListener('focus', () => {

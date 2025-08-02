@@ -208,12 +208,91 @@ async function performElasticsearchSearch(query, options = {}) {
   return await esClient.search(searchQuery);
 }
 
+// Helper function to get direct synonyms for a query
+function getDirectSynonyms(query) {
+  // Define common words and their related terms
+  const commonWords = {
+    // Technology terms
+    'mobile': ['phone', 'smartphone'],
+    'phone': ['mobile', 'smartphone'],
+    'smartphone': ['mobile', 'phone'],
+    'laptop': ['computer', 'notebook'],
+    'computer': ['laptop', 'pc', 'desktop'],
+    'headphone': ['earphone', 'headset', 'earbuds'],
+    'earphone': ['headphone', 'headset', 'earbuds'],
+    
+    // Fashion terms
+    'shirt': ['t-shirt', 'top', 'blouse'],
+    'shoe': ['footwear', 'sneaker', 'boot'],
+    'watch': ['timepiece', 'smartwatch'],
+    
+    // Home terms
+    'chair': ['seat', 'furniture'],
+    'table': ['desk', 'furniture'],
+    
+    // Sports terms
+    'ball': ['football', 'basketball', 'tennis ball'],
+    'gym': ['fitness', 'workout', 'exercise']
+  };
+  
+  // Check for direct matches first
+  if (commonWords[query]) {
+    return commonWords[query];
+  }
+  
+  // Check for prefix matches (dynamic matching)
+  const suggestions = [];
+  
+  // Find words that start with the query (minimum 3 characters)
+  if (query.length >= 3) {
+    Object.keys(commonWords).forEach(word => {
+      if (word.startsWith(query) && word !== query) {
+        // Add the complete word as first suggestion
+        suggestions.push(word);
+        // Add related terms
+        suggestions.push(...commonWords[word]);
+      }
+    });
+  }
+  
+  // For very short queries (2 characters), check common abbreviations
+  if (query.length === 2 || query.length === 3) {
+    const abbreviations = {
+      'mob': 'mobile',
+      'lap': 'laptop', 
+      'com': 'computer',
+      'pho': 'phone',
+      'sho': 'shoe',
+      'wat': 'watch',
+      'cha': 'chair',
+      'tab': 'table',
+      'bal': 'ball',
+      'gym': 'gym'
+    };
+    
+    if (abbreviations[query]) {
+      const fullWord = abbreviations[query];
+      suggestions.push(fullWord);
+      if (commonWords[fullWord]) {
+        suggestions.push(...commonWords[fullWord]);
+      }
+    }
+  }
+  
+  // Remove duplicates and return unique suggestions
+  return [...new Set(suggestions)];
+}
+
 router.get('/suggest', async (req, res) => {
   const q = (req.query.q || '').trim().toLowerCase();
   if (!q) return res.json([]);
 
   try {
-    let response = await performElasticsearchSearch(q, { size: 8, includeHighlight: true });
+    // 1. First, get direct synonyms for the query
+    const directSynonyms = getDirectSynonyms(q);
+    
+    // 2. Get product suggestions
+    let response = await performElasticsearchSearch(q, { size: directSynonyms.length > 0 ? 6 : 8, includeHighlight: true });
 
     // If still no results from main query, try category-based suggestions first
     if (response.hits.hits.length === 0) {
@@ -352,8 +431,8 @@ router.get('/suggest', async (req, res) => {
       response = await esClient.search(fuzzyQuery);
     }
 
-    // 3) Format results
-    const suggestions = response.hits.hits.map(hit => ({
+    // 3) Format product results
+    const productSuggestions = response.hits.hits.map(hit => ({
       id:        hit._id,
       title:     hit._source.title,
       category:  hit._source.category,
@@ -363,8 +442,33 @@ router.get('/suggest', async (req, res) => {
       highlight: hit.highlight || {}
     }));
 
-    // 4) If still no results from specific search, provide broader suggestions
-    if (suggestions.length === 0) {
+    // 4) Combine direct synonyms with product suggestions
+    let allSuggestions = [];
+    
+    // Add direct synonyms first (as text-only suggestions)
+    if (directSynonyms.length > 0) {
+      directSynonyms.forEach(synonym => {
+        allSuggestions.push({
+          id: `synonym_${synonym}`,
+          title: synonym,
+          category: 'Suggestion',
+          brand: '',
+          popularity: 1000, // High priority for synonyms
+          score: 1000,
+          highlight: {},
+          isSynonym: true
+        });
+      });
+    }
+    
+    // Add product suggestions
+    allSuggestions.push(...productSuggestions);
+    
+    // Limit total suggestions to 8
+    allSuggestions = allSuggestions.slice(0, 8);
+
+    // 5) If still no results from specific search, provide broader suggestions
+    if (allSuggestions.length === directSynonyms.length) { // Only synonyms, no products found
       // Try to find related products by expanding the search
       let fallbackSuggestions = [];
       
@@ -473,7 +577,7 @@ router.get('/suggest', async (req, res) => {
       return res.json(fallbackSuggestions);
     }
 
-    res.json(suggestions);
+    res.json(allSuggestions);
   } catch (err) {
     console.error('Elasticsearch search error:', err.message || err);
     console.log('🔄 Falling back to comprehensive search...');

@@ -6,9 +6,11 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
-    "test": "node test_search.js",
-    "reindex": "node reindex.js",
-    "generate-products": "node generate_products.js",
+    "test": "node tests/test_search.js",
+    "reindex": "node scripts/reindex.js",
+    "generate-products": "node scripts/generate_products.js",
+    "generate-10k": "node scripts/generate_10k_products.js",
+    "verify-images": "node tools/verify-images.js",
     "serve": "node src/server.js",
     "demo": "node src/server.js"
   },

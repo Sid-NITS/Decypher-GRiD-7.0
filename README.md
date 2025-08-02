@@ -11,9 +11,11 @@ DeCypher is an intelligent e-commerce search platform that addresses the core ch
 
 ### 🚀 Our Solution
 
-We've built a **real-time search engine** with advanced autocomplete functionality that combines the power of **Elasticsearch** with intelligent synonym mapping, contextual understanding, and lightning-fast response times. Our platform demonstrates enterprise-grade search capabilities while maintaining simplicity and reliability.
+We've built a **real-time search engine** with advanced autocomplete functionality that combines the power of **Elasticsearch 9.1.0** with intelligent synonym mapping, contextual understanding, and lightning-fast response times. Our platform features a **dynamic synonym system** with non-hardcoded, flexible recognition that intelligently maps abbreviations to full terms (e.g., "lap" → "laptop" appears first), **instant response clearing** that fixes UX issues where suggestions remained visible after clearing search input, and **enhanced project structure** with organized scripts/, tests/, and tools/ folders for professional maintainability.
 
-![Node.js](https://img.shields.io/badge/Node.js-v16+-green) ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-v8+-orange) ![Performance](https://img.shields.io/badge/Response_Time-<50ms-brightgreen) ![Reliability](https://img.shields.io/badge/Uptime-99.9%25-blue)
+The platform demonstrates enterprise-grade search capabilities with **multi-event handling** for responsive search clearing, **improved debouncing** with enhanced timeout logic, and **consistent behavior** applied across all search interfaces, while maintaining simplicity and reliability.
+
+![Node.js](https://img.shields.io/badge/Node.js-v16+-green) ![Elasticsearch](https://img.shields.io/badge/Elasticsearch-v9.1.0-orange) ![Performance](https://img.shields.io/badge/Response_Time-<50ms-brightgreen) ![Reliability](https://img.shields.io/badge/Uptime-99.9%25-blue)
 
 ---
 
@@ -21,13 +23,15 @@ We've built a **real-time search engine** with advanced autocomplete functionali
 
 ### 🔍 **Intelligent Search Engine**
 - **Real-time Autocomplete**: Instant suggestions as users type, reducing search friction
-- **Smart Synonym Recognition**: "mob" → mobile phones, "lapp" → laptops with context awareness
+- **Enhanced Synonym Recognition**: Dynamic synonym mapping with "mob" → mobile, "lap" → laptop
+- **Smart Suggestion Ordering**: Direct synonyms appear first, followed by relevant products
+- **Instant Clearing**: Suggestions disappear immediately when search input is cleared
 - **Fuzzy Search & Typo Tolerance**: Handles misspellings and partial queries intelligently
 - **Multi-field Search**: Searches across titles, descriptions, categories, brands, and tags simultaneously
 
 ### ⚡ **Enterprise Performance**
 - **Sub-50ms Response Times**: Lightning-fast search powered by optimized Elasticsearch
-- **412 Products Indexed**: Comprehensive product database with rich metadata
+- **10,000 Products Indexed**: Comprehensive product database with rich metadata
 - **Scalable Architecture**: Built to handle millions of concurrent users
 - **99.9% Uptime**: Robust error handling and fallback mechanisms
 
@@ -60,7 +64,7 @@ We've built a **real-time search engine** with advanced autocomplete functionali
 
 #### **Real-World Performance Metrics**
 - **Search Volume**: Capable of handling 10,000+ searches/second
-- **Database Scale**: Currently indexed with 412 products, easily scalable to millions
+- **Database Scale**: Currently indexed with 10,000 products, easily scalable to millions
 - **Response Time**: Consistent <50ms even under heavy load
 - **Concurrent Users**: Architecture supports 100,000+ simultaneous users
 
@@ -107,7 +111,7 @@ We've built a **real-time search engine** with advanced autocomplete functionali
 ```javascript
 // Core Technologies
 ├── Node.js + Express      // High-performance API server
-├── Elasticsearch 8.x      // Enterprise search engine
+├── Elasticsearch 9.1.0    // Enterprise search engine
 ├── Advanced Algorithms    // Smart synonym and fuzzy matching
 ├── RESTful APIs          // Scalable service architecture
 └── Real-time Analytics   // Performance monitoring
@@ -162,13 +166,21 @@ We've built a **real-time search engine** with advanced autocomplete functionali
 
 ### **Smart Search Examples**
 ```bash
-# Try these search queries to see intelligence in action:
+# Enhanced Synonym Recognition - Direct completions appear first:
+"mob"             → "mobile" (first), then mobile phones and accessories  
+"lap"             → "laptop" (first), then laptop computers and accessories
+"sho"             → "shoe" (first), then shoe products and footwear
+"head"            → "headphone" (first), then audio products
 
+# Traditional Product Searches:
 "iphone"          → iPhone 15 Pro, iPhone accessories, mobile cases
-"mob"             → Mobile phones, smartphones, mobile accessories  
-"lapp"            → Laptops, computers, accessories
 "samsung galaxy"  → Samsung Galaxy series, phone accessories
 "nike shoes"      → Nike footwear, sports shoes, athletic wear
+
+# Test the Enhanced UX:
+# 1. Type any query and watch suggestions appear
+# 2. Clear the search box → suggestions disappear immediately
+# 3. Try rapid typing/deleting → responsive clearing behavior
 ```
 
 ### **Performance Benchmarks**
@@ -218,7 +230,7 @@ cd elasticsearch-9.1.0-windows-x86_64\elasticsearch-9.1.0/bin
 
 # 2. Install and run DeCypher
 npm install
-npm run reindex    # Index 412 products
+npm run reindex    # Index 10,000 products
 npm start         # Start on http://localhost:3000
 ```
 
@@ -284,16 +296,75 @@ DeCypher-Platform/
 │   ├── data/comprehensive_products.json # Full product database
 │   └── data/category_images.json  # Image mapping system
 │
-├── 🔧 DevOps & Deployment
+├── 🔧 DevOps & Utilities
 │   ├── docker-compose.yml         # Container orchestration
 │   ├── package.json              # Dependencies and scripts
-│   ├── verify-images.js          # Asset verification
-│   └── reindex.js                # Data indexing utility
+│   ├── scripts/                  # Data generation and indexing
+│   ├── tests/                    # Test files and validation
+│   └── tools/                    # Utility scripts and verification
 │
 └── 📚 Documentation
     ├── README.md                  # This comprehensive guide
     ├── DATA_STRUCTURE.md          # Architecture documentation
     └── CHANGELOG.md               # Version history
+```
+
+## 🚀 Available NPM Scripts
+
+The platform includes comprehensive npm scripts for all development and production operations:
+
+### **Core Application Scripts**
+```bash
+# Start development server with live reload
+npm run dev
+
+# Start production server
+npm start
+
+# Run comprehensive test suite
+npm test
+```
+
+### **Data Management Scripts**
+```bash
+# Reindex all product data to Elasticsearch
+npm run reindex
+
+# Generate demo products (412 items)
+npm run generate:products
+
+# Generate comprehensive dataset (10,000 products)  
+npm run generate:comprehensive
+
+# Generate massive dataset (10,000+ products)
+npm run generate:10k
+```
+
+### **Testing & Validation Scripts**
+```bash
+# Run original suggestion tests
+npm run test:original
+
+# Run search functionality tests
+npm run test:search
+
+# Run suggestion accuracy tests
+npm run test:suggestions
+```
+
+### **Utility Scripts**
+```bash
+# Verify all product images are accessible
+npm run verify:images
+```
+
+### **Quick Development Workflow**
+```bash
+# Complete setup from scratch
+npm install
+npm run generate:comprehensive  # Create 10K products
+npm run reindex                 # Index to Elasticsearch
+npm run dev                     # Start development server
 ```
 
 ---
@@ -348,7 +419,7 @@ DeCypher-Platform/
 
 ### Prerequisites
 - Node.js 16+ installed
-- Elasticsearch 8+ running locally or accessible remotely
+- Elasticsearch 9.1.0 running locally or accessible remotely
 - npm or yarn package manager
 
 ### Installation
@@ -428,13 +499,22 @@ autosuggest-es/
 │   ├── featured_products.json       # 6 curated homepage products
 │   ├── category_images.json         # Image mapping configuration
 │   ├── demo_suggestions.json        # Search autocomplete suggestions
-│   ├── comprehensive_products.json  # 412 products for Elasticsearch
+│   ├── comprehensive_products.json  # 10,000 products for Elasticsearch
 │   └── products.json                # Original product database
-├── verify-images.js                 # Image verification script
-├── generate_comprehensive_products.js # Product data generation
+├── scripts/                         # Data generation and utilities
+│   ├── generate_10k_products.js     # 10K product dataset generator
+│   ├── generate_comprehensive_products.js # Product data generation
+│   ├── generate_products.js         # Basic product generator
+│   └── reindex.js                   # Elasticsearch indexing script
+├── tests/                           # Test files and validation
+│   ├── test_fixes.html              # Frontend test interface
+│   ├── test_search.js               # Search functionality tests
+│   ├── test_suggestions.js          # Suggestion system tests
+│   └── test_original_suggest.js     # Original suggestion tests
+├── tools/                           # Utility scripts
+│   └── verify-images.js             # Image verification script
 ├── package.json                     # Dependencies and scripts
 ├── .env                            # Environment configuration
-├── reindex.js                      # Elasticsearch indexing script
 ├── DATA_STRUCTURE.md               # Complete data architecture documentation
 └── README.md                       # This comprehensive documentation
 ```
@@ -443,17 +523,49 @@ autosuggest-es/
 
 ### Backend Technology Stack
 - **Node.js + Express**: RESTful API server with data endpoints
-- **Elasticsearch 8.x**: Professional search engine with 412 indexed products
-- **Advanced Synonym Engine**: Context-aware synonym mapping and typo tolerance
+- **Elasticsearch 9.1.0**: Professional search engine with 10,000 indexed products
+- **Enhanced Synonym Engine**: Dynamic, non-hardcoded synonym mapping with intelligent ordering
 - **Unified Search Logic**: Same algorithm for autocomplete and full search
 - **Error Handling**: Graceful fallbacks and comprehensive error recovery
 
 ### Frontend Technology Stack
-- **Vanilla JavaScript**: Modern ES6+ with async/await patterns
-- **CSS3**: Responsive design with Flexbox/Grid layouts
-- **SVG Graphics**: Scalable vector images for perfect quality
-- **Local Storage**: Persistent wishlist functionality
-- **Fetch API**: Modern HTTP client for data loading
+- **Modern JavaScript**: ES6+ with async/await patterns and enhanced event handling
+- **Responsive CSS3**: Mobile-first design approach with Flipkart-inspired styling
+- **SVG Graphics**: Scalable, lightweight images with 100% local availability
+- **Local Storage APIs**: Persistent user preferences and wishlist functionality
+- **Progressive Enhancement**: Enhanced UX with immediate search clearing and responsive suggestions
+
+## 🧪 Testing & Quality Assurance
+
+### **Available Test Suites**
+```bash
+# Run comprehensive search tests
+npm test
+# or directly: node tests/test_search.js
+
+# Test specific functionality
+npm run verify-images        # Verify all image assets
+node tests/test_suggestions.js   # Test suggestion algorithms
+```
+
+### **Interactive Test Pages**
+- **Search Clearing Test**: `/tests/test_search_clearing.html`
+  - Tests instant suggestion clearing when input is emptied
+  - Validates responsive behavior with rapid typing/deleting
+  - Ensures consistent behavior across all search interfaces
+
+- **Main Search Test**: Available through homepage and search page
+  - Test enhanced synonym recognition (mob → mobile, lap → laptop)
+  - Verify suggestion ordering (synonyms first, then products)
+  - Validate fuzzy search and typo tolerance
+
+### **Test Coverage**
+- ✅ **Search Functionality**: Full search algorithm testing
+- ✅ **Suggestion Logic**: Enhanced synonym recognition validation  
+- ✅ **UX Responsiveness**: Search clearing and input handling
+- ✅ **Image Assets**: 100% local image availability verification
+- ✅ **API Endpoints**: RESTful API response validation
+- ✅ **Error Handling**: Fallback mechanism testing
 
 ### Data Management
 - **JSON-based Storage**: Structured data files in `/data/` directory
@@ -585,11 +697,11 @@ The demo page shows real-time metrics:
 #### **Instant Setup (Recommended)**
 ```bash
 # 1. Start Elasticsearch (required)
-docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:9.1.0
 
 # 2. Install dependencies and start
 npm install
-npm run reindex    # Index 412 products
+npm run reindex    # Index 10,000 products
 npm start         # Start server on http://localhost:3000
 
 # 3. Open browser and enjoy!
@@ -607,7 +719,7 @@ npm start         # Start server on http://localhost:3000
 ### Local Development
 1. **Prerequisites**:
    - Node.js 16+ 
-   - Elasticsearch 8.x (Docker recommended)
+   - Elasticsearch 9.1.0 (Docker recommended)
    - Modern browser
 
 2. **Installation**:
@@ -627,7 +739,7 @@ npm start         # Start server on http://localhost:3000
 4. **Start Services**:
    ```bash
    # Start Elasticsearch (Docker)
-   docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+   docker run -d --name elasticsearch -p 9200:9200 -e "discovery.type=single-node" -e "xpack.security.enabled=false" docker.elastic.co/elasticsearch/elasticsearch:9.1.0
    
    # Index products
    npm run reindex
@@ -657,7 +769,9 @@ docker-compose up app
 ### Image Verification
 ```bash
 # Verify all local images are working
-node verify-images.js
+npm run verify-images
+# or directly:
+node tools/verify-images.js
 
 # Expected output: "All images found! Ready for production."
 ```
@@ -691,7 +805,7 @@ Visit the demo page to see live metrics:
 - ✅ **Documentation**: Comprehensive setup and architecture docs
 
 ### **Technical Excellence**
-- 🔧 **Elasticsearch Integration**: 412 products indexed with advanced search
+- 🔧 **Elasticsearch Integration**: 10,000 products indexed with Elasticsearch 9.1.0
 - 📊 **Data Architecture**: API-driven with centralized data management
 - 🎨 **Custom SVG Assets**: 16 professional images with brand colors
 - 💾 **Persistent Features**: localStorage wishlist across sessions

@@ -1218,7 +1218,13 @@
             }
 
             searchTimeout = setTimeout(() => {
-                fetchSuggestions(query);
+                // Double-check that query is still present when timeout executes
+                const currentQuery = searchInput.value.trim();
+                if (currentQuery.length >= 1) {
+                    fetchSuggestions(currentQuery);
+                } else {
+                    hideSuggestions();
+                }
             }, 150); // Even faster for search page
         }
 
@@ -1415,6 +1421,15 @@
             isSearchFocused = true;
             activeSuggestionIndex = -1;
             handleSearch(e.target.value);
+        });
+
+        searchInput.addEventListener('keyup', (e) => {
+            // Handle immediate hiding of suggestions when input is cleared
+            const query = e.target.value.trim();
+            if (query.length < 1) {
+                clearTimeout(searchTimeout);
+                hideSuggestions();
+            }
         });
 
         searchInput.addEventListener('focus', (e) => {

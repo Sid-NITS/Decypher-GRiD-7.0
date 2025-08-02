@@ -751,6 +751,7 @@
             searchInputs.forEach(input => {
                 if (input) {
                     input.addEventListener('input', handleSearchInput);
+                    input.addEventListener('keyup', handleSearchKeyUp);
                     input.addEventListener('keydown', handleSearchKeydown);
                     input.addEventListener('blur', handleSearchBlur);
                     input.addEventListener('focus', handleSearchFocus);
@@ -786,6 +787,17 @@
             }, 150);
         }
 
+        function handleSearchKeyUp(e) {
+            // Handle immediate hiding of suggestions when input is cleared
+            const query = e.target.value.trim();
+            const isHeroSearch = e.target.id === 'heroSearchInput';
+            
+            if (query.length < 1) {
+                clearTimeout(searchTimeout);
+                hideSuggestions(isHeroSearch);
+            }
+        }
+
         function handleDocumentClick(e) {
             const searchContainers = document.querySelectorAll('.search-container, .hero-search');
             let clickedInSearch = false;
@@ -810,18 +822,32 @@
             isSearchFocused = true;
             activeSuggestionIndex = -1;
             
+            // Clear any pending timeout
+            clearTimeout(searchTimeout);
+            
             if (query.length < 1) {
                 hideSuggestions(isHeroSearch);
                 return;
             }
 
-            clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
-                fetchSuggestions(query, isHeroSearch);
+                // Double-check that the input still has content when timeout executes
+                const currentQuery = e.target.value.trim();
+                if (currentQuery.length >= 1) {
+                    fetchSuggestions(currentQuery, isHeroSearch);
+                } else {
+                    hideSuggestions(isHeroSearch);
+                }
             }, 200); // Reduced delay for faster response
         }
 
         async function fetchSuggestions(query, isHeroSearch = false) {
+            // Safety check: if query is empty, hide suggestions instead
+            if (!query || query.trim().length < 1) {
+                hideSuggestions(isHeroSearch);
+                return;
+            }
+            
             try {
                 // Use the actual API endpoint for suggestions
                 const response = await fetch(`/api/suggest?q=${encodeURIComponent(query)}&limit=6`);

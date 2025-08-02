@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Clearing Test - DeCypher</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2874f0;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .test-steps {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .test-steps ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .test-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #2874f0;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #1a5dc0;
+        }
+        .expected-behavior {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #4caf50;
+        }
+        .expected-behavior h4 {
+            color: #2e7d32;
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔍 Search Suggestion Clearing Test</h1>
+        
+        <div class="test-section">
+            <div class="test-title">Test Case: Search Input Clearing</div>
+            
+            <div class="test-steps">
+                <strong>Test Steps:</strong>
+                <ol>
+                    <li>Click on any of the test pages below</li>
+                    <li>Type a few characters in the search box (e.g., "mob", "lap", "nike")</li>
+                    <li>Wait for suggestions to appear</li>
+                    <li>Clear the search box using any method:
+                        <ul>
+                            <li>Backspace/Delete to remove all characters</li>
+                            <li>Select all text (Ctrl+A) and delete</li>
+                            <li>Double-click to select and type new text</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="expected-behavior">
+                <h4>✅ Expected Behavior:</h4>
+                <ul>
+                    <li><strong>Immediate hiding:</strong> Suggestions should disappear immediately when the search box becomes empty</li>
+                    <li><strong>No lingering suggestions:</strong> No suggestions should remain visible after clearing</li>
+                    <li><strong>Responsive clearing:</strong> Works with all clearing methods (backspace, select+delete, etc.)</li>
+                    <li><strong>Consistent behavior:</strong> Same behavior across all search interfaces</li>
+                </ul>
+            </div>
+            
+            <div class="test-links">
+                <a href="http://localhost:3000" class="test-link" target="_blank">🏠 Main Homepage</a>
+                <a href="http://localhost:3000/search.html" class="test-link" target="_blank">🔍 Search Page</a>
+                <a href="http://localhost:3000/demo.html" class="test-link" target="_blank">⚡ Demo Page</a>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">Additional Test Scenarios</div>
+            
+            <div class="test-steps">
+                <strong>Advanced Tests:</strong>
+                <ol>
+                    <li><strong>Rapid typing/deleting:</strong> Type quickly, then delete quickly - suggestions should respond immediately</li>
+                    <li><strong>Focus/blur behavior:</strong> Click outside search box, then click back in with empty field - no suggestions should appear</li>
+                    <li><strong>Keyboard navigation:</strong> Use arrow keys to navigate suggestions, then clear input - suggestions should hide</li>
+                    <li><strong>Multiple search boxes:</strong> Test both header search and hero search on homepage</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <div class="test-title">🚀 Fixed Issues</div>
+            <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107;">
+                <h4 style="color: #856404; margin-top: 0;">✅ Previous Issue (Now Fixed):</h4>
+                <p style="margin: 0; color: #856404;">
+                    <strong>Problem:</strong> Search suggestions would remain visible even after clearing the search input, creating a confusing user experience.
+                </p>
+                <p style="margin: 10px 0 0 0; color: #856404;">
+                    <strong>Solution:</strong> Added immediate clearing on keyup events and race condition prevention in setTimeout callbacks.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add a simple status indicator
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Search clearing test page loaded');
+            console.log('📋 Follow the test steps above to verify the search suggestion clearing behavior');
+        });
+    </script>
+</body>
+</html>

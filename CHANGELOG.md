@@ -14,7 +14,7 @@ All notable changes to this project will be documented in this file.
 - **Brand-Appropriate Colors**: Each image uses authentic brand colors and typography
 
 #### Image Verification System
-- **Automated Verification**: `verify-images.js` script checks all 44 image references
+- **Automated Verification**: `tools/verify-images.js` script checks all 44 image references
 - **Production Ready**: All images verified and accessible
 - **Performance Optimized**: Local SVG assets for instant loading
 

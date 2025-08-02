@@ -514,8 +514,8 @@ All 44 image references verified and working:
 - `featured_products.json`: 6 curated homepage products
 - `category_images.json`: Complete image mapping system
 - `demo_suggestions.json`: Search autocomplete suggestions
-- `comprehensive_products.json`: 412 products for Elasticsearch
-- `verify-images.js`: Image verification and testing script
+- `comprehensive_products.json`: 10,000 products for Elasticsearch
+- `tools/verify-images.js`: Image verification and testing script
 
 ### 🚀 **Ready for Flipkart Grid 7.0 Finale**
 The platform is fully operational with:

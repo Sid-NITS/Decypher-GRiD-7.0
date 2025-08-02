@@ -44,7 +44,9 @@ node src/server.js
 ### Test Searches
 ```bash
 # Test with the comprehensive test suite
-node test_search.js
+npm test
+# or directly:
+node tests/test_search.js
 
 # Or test manually with curl
 curl "http://localhost:3000/api/suggest?q=banana"
