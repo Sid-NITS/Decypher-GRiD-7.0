@@ -567,14 +567,14 @@ function displayFeaturedProducts(products) {
         
         return `
             <div class="product-card">
-                <div class="product-image">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                    <i class="fas fa-image" style="display: none;"></i>
-                    <div class="wishlist-icon" onclick="toggleWishlist(event, '${product.id}')">
-                        <i class="far fa-heart"></i>
-                    </div>
-                </div>
                 <a href="product.html?id=${product.id}" class="product-link">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <i class="fas fa-image" style="display: none;"></i>
+                        <div class="wishlist-icon" onclick="toggleWishlist(event, '${product.id}')">
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
                     <div class="product-name">${product.name}</div>
                     <div class="product-rating">
                         <div class="rating-badge">

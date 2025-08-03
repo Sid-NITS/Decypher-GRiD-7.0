@@ -14,13 +14,15 @@ function getExpandedQueries(query) {
     // Mobile/Phone synonyms
     'mob': ['mobile', 'phone', 'smartphone'],
     'mobil': ['mobile', 'phone', 'smartphone'],
+    'mobli': ['mobile', 'phone', 'smartphone'], // Common misspelling
+    'moblie': ['mobile', 'phone', 'smartphone'], // Common misspelling
     'mobile': ['phone', 'smartphone'],
     'phone': ['mobile', 'smartphone'],
     'smartphone': ['mobile', 'phone'],
     
     // Computer/Laptop synonyms
     'lapp': ['laptop', 'computer', 'notebook'],
-    'laptp': ['laptop', 'computer', 'notebook'],
+    'laptp': ['laptop', 'computer', 'notebook'], // Common misspelling
     'laptop': ['computer', 'notebook'],
     'computer': ['laptop', 'pc', 'desktop'],
     'comp': ['computer', 'laptop'],

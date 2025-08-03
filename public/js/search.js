@@ -86,16 +86,22 @@ const searchInput = document.getElementById('searchInput');
 const suggestions = document.getElementById('suggestions');
 let activeSuggestionIndex = -1;
 let isSearchFocused = false;
+let justSelectedSuggestion = false; // Flag to prevent immediate re-showing of suggestions
+let justPerformedSearch = false; // Flag to prevent suggestions after search
 
 // Perform search
 async function performSearch(query) {
+    // Set flag to prevent suggestions from showing during/after search
+    justPerformedSearch = true;
+    hideSuggestions();
+    
     if (!query.trim()) {
         try {
             // If empty query, get all products from API
-            const response = await fetch('/api/search?q=&limit=50');
+            const response = await fetch('/api/suggestions?q=&limit=50');
             if (response.ok) {
                 const data = await response.json();
-                const results = data.results || data; // Handle both structured and direct response
+                const results = data.suggestions || data; // Handle both structured and direct response
                 const transformedResults = transformApiResults(results);
                 displayResults(transformedResults);
                 updateResultsInfo(transformedResults.length, 'All Products');
@@ -114,14 +120,14 @@ async function performSearch(query) {
     
     try {
         // Use actual API for search
-        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}&limit=50`);
+        const response = await fetch(`/api/suggestions?q=${encodeURIComponent(query)}&limit=50`);
         
         if (!response.ok) {
             throw new Error('API request failed');
         }
         
         const data = await response.json();
-        const results = data.results || data; // Handle both structured and direct response
+        const results = data.suggestions || data; // Handle both structured and direct response
         const transformedResults = transformApiResults(results);
         
         hideLoading();
@@ -150,6 +156,11 @@ async function performSearch(query) {
             showNoResults();
         }
     }
+    
+    // Clear the search flag after a delay to allow suggestions again
+    setTimeout(() => {
+        justPerformedSearch = false;
+    }, 500);
 }
 
 // Transform API results to match our display format
@@ -221,14 +232,14 @@ async function performCategorySearch(category) {
     
     try {
         // Use actual API for category search
-        const response = await fetch(`/api/search?q=${encodeURIComponent(category)}&limit=50`);
+        const response = await fetch(`/api/suggestions?q=${encodeURIComponent(category)}&limit=50`);
         
         if (!response.ok) {
             throw new Error('API request failed');
         }
         
         const data = await response.json();
-        const results = data.results || data; // Handle both structured and direct response
+        const results = data.suggestions || data; // Handle both structured and direct response
         const transformedResults = transformApiResults(results);
         
         hideLoading();
@@ -422,15 +433,20 @@ function updateUrl(query) {
 function handleSearch(query) {
     clearTimeout(searchTimeout);
     
+    // Don't show suggestions if we just selected one or just performed a search
+    if (justSelectedSuggestion || justPerformedSearch) {
+        return;
+    }
+    
     if (query.length < 1) {
         hideSuggestions();
         return;
     }
 
     searchTimeout = setTimeout(() => {
-        // Double-check that query is still present when timeout executes
+        // Double-check that query is still present when timeout executes and we didn't just select a suggestion or perform search
         const currentQuery = searchInput.value.trim();
-        if (currentQuery.length >= 1) {
+        if (currentQuery.length >= 1 && !justSelectedSuggestion && !justPerformedSearch) {
             fetchSuggestions(currentQuery);
         } else {
             hideSuggestions();
@@ -620,10 +636,19 @@ function highlightMatch(text, query) {
 }
 
 function selectSuggestion(text) {
+    justSelectedSuggestion = true; // Set flag to prevent re-showing suggestions
+    justPerformedSearch = true; // Also prevent search-related suggestions
     searchInput.value = text;
     hideSuggestions();
+    searchInput.blur(); // Remove focus to prevent re-triggering
     performSearch(text);
     updateUrl(text);
+    
+    // Clear the flags after a delay
+    setTimeout(() => {
+        justSelectedSuggestion = false;
+        justPerformedSearch = false;
+    }, 500);
 }
 
 // Event listeners
@@ -686,9 +711,11 @@ searchInput.addEventListener('keydown', (e) => {
                 } else {
                     const query = searchInput.value.trim();
                     if (query) {
+                        justPerformedSearch = true; // Set flag to prevent suggestions
+                        hideSuggestions();
+                        searchInput.blur(); // Remove focus to prevent re-triggering
                         performSearch(query);
                         updateUrl(query);
-                        hideSuggestions();
                     }
                 }
                 break;
@@ -703,9 +730,11 @@ searchInput.addEventListener('keydown', (e) => {
             e.preventDefault();
             const query = searchInput.value.trim();
             if (query) {
+                justPerformedSearch = true; // Set flag to prevent suggestions
+                hideSuggestions();
+                searchInput.blur(); // Remove focus to prevent re-triggering
                 performSearch(query);
                 updateUrl(query);
-                hideSuggestions();
             }
         } else if (e.key === 'Escape') {
             hideSuggestions();
@@ -727,9 +756,11 @@ document.getElementById('searchForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const query = searchInput.value.trim();
     if (query) {
+        justPerformedSearch = true; // Set flag to prevent suggestions
+        hideSuggestions();
+        searchInput.blur(); // Remove focus to prevent re-triggering
         performSearch(query);
         updateUrl(query);
-        hideSuggestions();
     }
 });
 

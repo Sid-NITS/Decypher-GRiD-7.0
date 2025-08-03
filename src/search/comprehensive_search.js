@@ -32,9 +32,14 @@ class ComprehensiveSearchEngine {
         // Create synonym mapping for better matching
         const synonyms = {
             'mobile': ['smartphone', 'phone', 'smartphones', 'mobiles'],
+            'mobl': ['mobile', 'smartphone', 'phone', 'smartphones', 'mobiles'], // Common partial typing
+            'mobli': ['mobile', 'smartphone', 'phone', 'smartphones', 'mobiles'], // Common misspelling
+            'moblie': ['mobile', 'smartphone', 'phone', 'smartphones', 'mobiles'], // Common misspelling
             'phone': ['mobile', 'smartphone', 'smartphones', 'mobiles'],
             'smartphone': ['mobile', 'phone', 'smartphones', 'mobiles'],
             'laptop': ['computer', 'notebook', 'laptops'],
+            'laptp': ['laptop', 'computer', 'notebook', 'laptops'], // Common misspelling
+            'labtop': ['laptop', 'computer', 'notebook', 'laptops'], // Common misspelling
             'computer': ['laptop', 'pc', 'desktop', 'laptops'],
             'headphone': ['earphone', 'headphones', 'earphones', 'earbuds'],
             'earphone': ['headphone', 'headphones', 'earphones', 'earbuds']
@@ -70,14 +75,14 @@ class ComprehensiveSearchEngine {
                     score += 30;
                 }
 
-                // Fuzzy matching for titles
+                // Fuzzy matching for titles - reduced priority
                 if (this.fuzzyMatch(term, title)) {
-                    score += 20;
+                    score += 5; // Reduced from 20 to 5
                 }
 
-                // Fuzzy matching for brands
+                // Fuzzy matching for brands - reduced priority  
                 if (this.fuzzyMatch(term, brand)) {
-                    score += 15;
+                    score += 3; // Reduced from 15 to 3
                 }
             });
 
@@ -395,28 +400,53 @@ class ComprehensiveSearchEngine {
         const category = product.category.toLowerCase();
         const brand = product.brand.toLowerCase();
 
-        // Exact prefix matches get highest score
-        if (title.startsWith(query)) score += 100;
-        if (brand.startsWith(query)) score += 90;
-        if (category.includes(query)) score += 80;
+        // Add synonym support to calculateSuggestionScore
+        const synonyms = {
+            'mobile': ['smartphone', 'phone', 'smartphones', 'mobiles'],
+            'mobl': ['mobile', 'smartphone', 'phone', 'smartphones', 'mobiles'], // Common partial typing
+            'mobli': ['mobile', 'smartphone', 'phone', 'smartphones', 'mobiles'], // Common misspelling
+            'moblie': ['mobile', 'smartphone', 'phone', 'smartphones', 'mobiles'], // Common misspelling
+            'phone': ['mobile', 'smartphone', 'smartphones', 'mobiles'],
+            'smartphone': ['mobile', 'phone', 'smartphones', 'mobiles'],
+            'laptop': ['computer', 'notebook', 'laptops'],
+            'laptp': ['laptop', 'computer', 'notebook', 'laptops'], // Common misspelling
+            'labtop': ['laptop', 'computer', 'notebook', 'laptops'], // Common misspelling
+            'computer': ['laptop', 'pc', 'desktop', 'laptops'],
+            'headphone': ['earphone', 'headphones', 'earphones', 'earbuds'],
+            'earphone': ['headphone', 'headphones', 'earphones', 'earbuds']
+        };
 
-        // Word boundary matches
-        const titleWords = title.split(' ');
-        const categoryWords = category.split(' ');
-        
-        titleWords.forEach(word => {
-            if (word.startsWith(query)) score += 70;
-            if (word.includes(query)) score += 40;
+        // Get all possible search terms including synonyms
+        const searchTerms = [query];
+        if (synonyms[query]) {
+            searchTerms.push(...synonyms[query]);
+        }
+
+        // Score against all search terms (original query + synonyms)
+        searchTerms.forEach(term => {
+            // Exact prefix matches get highest score
+            if (title.startsWith(term)) score += 100;
+            if (brand.startsWith(term)) score += 90;
+            if (category.includes(term)) score += 80;
+
+            // Word boundary matches
+            const titleWords = title.split(' ');
+            const categoryWords = category.split(' ');
+            
+            titleWords.forEach(word => {
+                if (word.startsWith(term)) score += 70;
+                if (word.includes(term)) score += 40;
+            });
+
+            categoryWords.forEach(word => {
+                if (word.startsWith(term)) score += 60;
+                if (word.includes(term)) score += 30;
+            });
+
+            // Fuzzy matching for typos - reduced scores
+            if (this.fuzzyMatch(term, title)) score += 5;
+            if (this.fuzzyMatch(term, brand)) score += 3;
         });
-
-        categoryWords.forEach(word => {
-            if (word.startsWith(query)) score += 60;
-            if (word.includes(query)) score += 30;
-        });
-
-        // Fuzzy matching for typos
-        if (this.fuzzyMatch(query, title)) score += 20;
-        if (this.fuzzyMatch(query, brand)) score += 15;
 
         // Boost popular items
         score += (product.popularity || 0) * 0.1;
